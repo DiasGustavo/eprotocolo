@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:event listener="#{parecerBean.listar}" type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="formPesquisaParecer">
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Pesquisa Pareceres" />
+				</f:facet>
+
+				<f:facet name="right">
+					<h:commandLink>
+						<p:graphicImage library="images" name="excel.png" width="24" />
+						<p:dataExporter type="xls" target="tblPareceres"
+							fileName="Pareceres" />
+					</h:commandLink>
+
+					<h:commandLink>
+						<p:graphicImage library="images" name="pdf.png" width="24" />
+						<p:dataExporter type="pdf" target="tblPareceres"
+							fileName="Pareceres" encoding="ISO-8859-1" />
+					</h:commandLink>
+				</f:facet>
+			</p:toolbar>
+
+			<p:separator />
+
+			<p:dataTable id="tblPareceres"
+				emptyMessage="Nenhum registro encontrado."
+				value="#{parecerBean.listaPareceres}" var="parecer"
+				filteredValue="#{parecerBean.listaPareceresFiltrados}" rows="6"
+				paginator="true" widgetVar="atabela" >
+				<f:facet name="footer">
+					<p:button value="Novo" icon="ui-icon-plus"
+						outcome="/pages/parecer/parecerCadastro.xhtml?faces-redirect=true">
+						<f:param name="paracao" value="novo" />
+					</p:button>
+				</f:facet>
+				<!--  <p:column headerText="Código" filterBy="#{parecer.id}"
+					sortBy="#{parecer.id}"
+					filterStyle="max-width: 90%; min-width: 90%;"
+					style="width: 12%; text-align: center;">
+					<h:outputText value="#{parecer.id}" />
+				</p:column> -->
+
+				<p:column headerText="Nº Parecer" filterBy="#{parecer.numero}"
+					filterStyle="max-width: 80%; min-width: 80%;"
+					style="width: 7%; text-align: center;">
+					<h:outputText value="#{parecer.numero}" />
+				</p:column>
+
+				<p:column headerText="Processo"
+					filterBy="#{parecer.documento.processo}"
+					filterStyle="max-width: 80%; min-width: 80%;"
+					style="width: 9%; text-align: center;">
+					<h:outputText value="#{parecer.documento.processo}" />
+				</p:column>
+
+				<p:column headerText="Responsável"
+					style="width: 10%; text-align: center;">
+					<h:outputText value="#{parecer.funcionario.nome}" />
+				</p:column>
+
+				<p:column headerText="Expedicação"
+					style="width: 8%; text-align: center;">
+					<h:outputText value="#{parecer.dataEntrada}">
+						<f:convertDateTime pattern="dd/MM/yyyy" locale="pt"
+							timeZone="GMT-3" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Favorecido"
+					filterBy="#{parecer.documento.empresa.razao}"
+					filterStyle="max-width: 70%; min-width: 70%;"
+					style="width: 10%; text-align: center;">
+					<h:outputText value="#{parecer.documento.empresa.razao}" />
+				</p:column>
+
+				<p:column headerText="Secretaria"
+					filterBy="#{parecer.documento.secretaria}"
+					filterStyle="max-width: 70%; min-width: 70%;"
+					style="width: 8%; text-align: center;">
+					<h:outputText value="#{parecer.documento.secretaria}" />
+				</p:column>
+
+				<p:column headerText="Opções"
+					style="width: 15%; text-align: center;" exportable="false">
+					<p:button value="Editar" icon="	ui-icon-gear"
+						outcome="/pages/parecer/parecerCadastro.xhtml?faces-redirect=true">
+						<f:param name="parId" value="#{parecer.id}" />
+						<f:param name="paracao" value="editar" />
+					</p:button>
+					<p:button value="Excluir" icon="ui-icon-close"
+						outcome="/pages/parecer/parecerCadastro.xhtml?faces-redirect=true">						
+						<f:param name="parId" value="#{parecer.id}" />
+						<f:param name="paracao" value="excluir" />
+					</p:button>
+					<p:commandButton id="parecerButtom" value="Parecer"
+						icon="ui-icon-document" process="parecerButtom"
+						actionListener="#{parecerBean.gerarParecer(parecer.id)}"
+						ajax="false" onclick="this.form.target='_blank'"/>
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+
+</html>

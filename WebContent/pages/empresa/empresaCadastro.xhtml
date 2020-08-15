@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="empacao" value="#{empresaBean.acao}" />
+			<f:viewParam name="empId" value="#{empresaBean.codigo}" />
+
+			<f:event listener="#{empresaBean.carregarDados}" type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<h:form id="formCadEmpresa">
+
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Cadastro Empresa" />
+				</f:facet>
+			</p:toolbar>
+
+			<h:panelGrid id="pnlEmpresaDados" columns="2">
+
+				<p:outputLabel value="Razão Social:" />
+				<p:inputText maxlength="50" size="30"
+					value="#{empresaBean.empresaCadastro.razao}"
+					readonly="#{empresaBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+
+				<p:outputLabel value="CNPJ/CPF:" />
+				<p:inputText size="14" maxlength="20"
+					value="#{empresaBean.empresaCadastro.cnpj}"
+					readonly="#{empresaBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+				
+				<p:outputLabel value="Email:" />
+				<p:inputText maxlength="50" size="30"
+					value="#{empresaBean.empresaCadastro.email}"
+					readonly="#{empresaBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="5">
+				<p:commandButton value="Novo" icon="ui-icon-plus"
+					actionListener="#{empresaBean.novo}"
+					update=":formCadEmpresa:pnlEmpresaDados"
+					rendered="#{empresaBean.acao == 'novo'}" />
+				<p:commandButton value="Gravar" icon="ui-icon-disk"
+					actionListener="#{empresaBean.salvar}"
+					update=":msgGlobal :formCadEmpresa:pnlEmpresaDados"
+					rendered="#{empresaBean.acao == 'novo' and autenticacaoBean.orgaoLogado.status == 'A'}" />
+				<p:button value="Voltar" icon="ui-icon-arrowreturnthick-1-w"
+					outcome="/pages/empresa/empresaPesquisa.xhtml?faces-redirect=true" />
+				<p:commandButton value="Gravar" icon="ui-icon-disk"
+					actionListener="#{empresaBean.editar}" update=":msgGlobal"
+					rendered="#{empresaBean.acao == 'editar'}" />
+				<p:commandButton value="Excluir" icon="ui-icon-close"
+					oncomplete="PF('confirmacaoExcluir').show();"
+					rendered="#{empresaBean.acao == 'excluir'}" />
+			</h:panelGrid>
+		</h:form>
+
+		<!-- MENSAGEM PARA CONFIRMAÇÃO DE EXCLUSÃO -->
+		<p:confirmDialog id="confirmacaoDialogExcluir" appendTo="@(body)"
+			message="Tem certeza que deseja EXCLUIR este Favorecido?"
+			header="Confirmação" severity="alert" widgetVar="confirmacaoExcluir">
+			<p:commandButton id="btnConfirmExcluir" value="Sim"
+				oncomplete="PF('confirmacaoExcluir').hide()"
+				icon="ui-icon-circle-check" action="#{empresaBean.excluir}"
+				update=":msgGlobal" />
+			<p:commandButton id="btnDeclineExcluir" value="Cancelar"
+				onclick="PF('confirmacaoExcluir').hide()" type="button"
+				icon="ui-icon-cancel" />
+		</p:confirmDialog>
+	</ui:define>
+
+</ui:composition>
+
+</html>

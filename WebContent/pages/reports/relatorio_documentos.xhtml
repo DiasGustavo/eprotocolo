@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:event listener="#{relatoriosBean.carregaDados}"
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<h:form id="relatorioDocumentos">
+
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Relatório Documentos" />
+				</f:facet>
+			</p:toolbar>
+			
+
+				<h:panelGrid id="pnlRelatorios" columns="2" >
+
+					<p:outputLabel value="Status:" />
+					<p:selectOneMenu value="#{relatoriosBean.status}"
+						style="width: 200px">
+						<f:selectItem itemValue="%%" itemLabel="Selecione o Status" />
+						<f:selectItem itemValue="em análise" itemLabel="em análise" />
+						<f:selectItem itemValue="analisado" itemLabel="analisado" />						
+						<f:validateBean />
+					</p:selectOneMenu>
+
+
+					<p:outputLabel value="Secretaria:" />
+					<p:selectOneMenu style="width: 200px"
+						value="#{relatoriosBean.secretaria}">
+						<f:selectItem itemValue="%%" itemLabel="Selecione o Secretaria" />
+						<f:selectItem itemValue="administracao" itemLabel="Administração" />
+						<f:selectItem itemValue="agricultura" itemLabel="Agricultura" />
+						<f:selectItem itemValue="gabinete" itemLabel="Gabinete" />
+						<f:selectItem itemValue="procon" itemLabel="Defesa do Consumidor" />
+						<f:selectItem itemValue="des.economico"
+							itemLabel="Desenvolvimento Econômico" />
+						<f:selectItem itemValue="des.social"
+							itemLabel="Desenvolvimento Social" />
+						<f:selectItem itemValue="educacao" itemLabel="Educação" />
+						<f:selectItem itemValue="Financas" itemLabel="Finanças" />
+						<f:selectItem itemValue="infraestrutura"
+							itemLabel="Infraestrutura" />
+						<f:selectItem itemValue="meio.ambiente" itemLabel="Meio Ambiente" />
+						<f:selectItem itemValue="planejamento" itemLabel="Planejamento" />
+						<f:selectItem itemValue="saude" itemLabel="Saúde" />
+						<f:selectItem itemValue="serv.publico"
+							itemLabel="Serviços Públicos" />
+						<f:selectItem itemValue="tur.esporte"
+							itemLabel="Turismo e Esportes" />
+						<f:selectItem itemValue="procuradoria" itemLabel="Procuradoria" />
+						<f:selectItem itemValue="fund.cultura"
+							itemLabel="Fundação Cultural" />
+						<f:validateBean />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Responsável:" />
+					<p:selectOneMenu style="width: 200px"
+						value="#{relatoriosBean.responsavel}"
+						converter="funcionarioConverter" filter="true"
+						filterMatchMode="startsWith">
+						<f:selectItem itemValue="%%" itemLabel="Selecione o responsável" />
+						<f:selectItems value="#{relatoriosBean.listaFuncionarios}"
+							var="responsavel" itemValue="#{responsavel}"
+							itemLabel="#{responsavel.nome}" />
+						<f:validateBean />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Data Incial:" />
+					<p:calendar style="width: 200px" value="#{relatoriosBean.entrada}"
+						pattern="dd/MM/yyyy" mask="true" mode="popup" locale="pt">
+						<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+						<f:validateBean />
+					</p:calendar>
+					
+					<p:outputLabel value="Data Final:" />
+					<p:calendar style="width: 200px" value="#{relatoriosBean.saida}"
+						pattern="dd/MM/yyyy" mask="true" mode="popup" locale="pt">
+						<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+						<f:validateBean />
+					</p:calendar>
+
+					<h:panelGrid>
+
+						<p:commandButton value="Gerar" icon="ui-icon-print"
+							actionListener="#{relatoriosBean.relatorioDocumentos}"
+							ajax="false" onclick="this.form.target='_blank'" />
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:graphicImage library="images" name="relatorios.png"
+					styleClass="image-relatorio" />
+					
+			
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+</html>

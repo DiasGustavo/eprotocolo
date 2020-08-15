@@ -1,0 +1,94 @@
+@CHARSET "UTF-8";
+
+.ui-widget, .ui-widget .ui-widget {
+	font-size: 98%;
+}
+
+.grid-login {
+	background-color: #f2f2f2;
+	border-radius: 8px;
+	border: 1px solid #ccc;
+	margin-top: 100px;
+	margin-left: 400px;
+	padding: 10px;
+	width: 50% al
+}
+
+.buttom-entrar {
+	margin-top: 40px;
+	margin-left: 400px;
+	padding: 10px;
+	width: 50%
+}
+
+.buttom-informacao{
+	margin-top: 40px;
+	margin-left: 400px;
+	padding: 10px;
+	width: 100px;
+	height: 100px;
+}
+
+.textarea {
+	width: 100%;
+	height: 100px;
+	padding: 12px 20px;
+	box-sizing: border-box;
+	border: 2px solid #ccc;
+	border-radius: 4px;
+	background-color: #f8f8f8;
+	font-size: 16px;
+	resize: none;
+}
+
+.reports-area {
+	background-image: url("#{resource['images/relatorios.png']}");
+	width: 300px;
+	height: 300px;
+}
+
+.image-relatorio {
+	margin-left: 300px;
+	margin-top: 5px;
+	width: 500px;
+	height: 200px;
+	background-repeat: no-repeat;
+	background-position: bottom right;
+}
+
+.image-principal {
+	margin-left: 100px;
+	margin-top: 5px;
+	width: 600px;
+	height: 230px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.status_saida {
+	background-color: #009999 !important;
+	font-weight: bold;
+	color: #093460;
+}
+
+.destaque {
+	background-color: #009999 !important;
+	font-weight: bold;
+	color: #093460;
+}
+.selecionado:hover, .selecionado:first-child, .selecionado:nth-child(odd) {
+    background-color: #EFF042 !important;
+    background: #EFF042 !important;
+}
+.listQuadro {
+	width: 100px;
+	height: 50px;	
+}
+.banner {
+	position: absolute;
+	left: 20px; 
+	top: 0px;
+  	height: 99%;
+  	width: 40%;
+  
+}

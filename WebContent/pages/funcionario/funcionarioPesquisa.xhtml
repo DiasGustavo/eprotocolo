@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:event listener="#{funcionarioBean.listar}" type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form>
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Pesquisa Funcionarios" />
+				</f:facet>
+			</p:toolbar>
+
+			<p:dataTable emptyMessage="Nenhum registro encontrado."
+				value="#{funcionarioBean.listaFuncionarios}"
+				filteredValue="#{funcionarioBean.listaFuncionariosFiltrados}"
+				var="funcionario" rows="6" paginator="true" styleClass="table">
+				<f:facet name="footer">
+					<p:button value="Novo" icon="ui-icon-plus"
+						outcome="/pages/funcionario/funcionarioCadastro.xhtml?faces-redirect=true"
+						rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'administrador' or autenticacaoBean.funcionarioLogado.funcao == 'secretário(a)'}">
+						<f:param name="funacao" value="novo" />
+					</p:button>
+				</f:facet>
+				<p:column headerText="Código" filterBy="#{funcionario.id}"
+					filterStyle="max-width: 60%; min-width: 60%;"
+					style="width: 3%; text-align: center;">
+					<h:outputText value="#{funcionario.id}" />
+				</p:column>
+
+				<p:column headerText="Nome" filterBy="#{funcionario.nome}"
+					filterStyle="max-width: 90%; min-width: 90%;"
+					style="width: 12%; text-align: center;">
+					<h:outputText value="#{funcionario.nome}" />
+				</p:column>
+
+				<p:column headerText="Matrícula" filterBy="#{funcionario.matricula}"
+					style="width: 12%; text-align: center;">
+					<h:outputText value="#{funcionario.matricula}" />
+				</p:column>
+
+				<p:column headerText="Email" style="width: 12%; text-align: center;">
+					<h:outputText value="#{funcionario.email}" />
+				</p:column>
+
+				<p:column headerText="Opções"
+					style="width: 12%; text-align: center;">
+					<p:button value="Editar" icon="	ui-icon-gear"
+						outcome="/pages/funcionario/funcionarioCadastro.xhtml?faces-redirect=true"
+						rendered="#{autenticacaoBean.funcionarioLogado.nome == funcionario.nome or autenticacaoBean.funcionarioLogado.funcao == 'administrador'}">
+						<f:param name="funId" value="#{funcionario.id}" />
+						<f:param name="funacao" value="editar" />
+					</p:button>
+					<p:button value="Excluir" icon="ui-icon-close"
+						outcome="/pages/funcionario/funcionarioCadastro.xhtml?faces-redirect=true"
+						rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'administrador'}">
+						<f:param name="funId" value="#{funcionario.id}" />
+						<f:param name="funacao" value="excluir" />
+					</p:button>
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+
+</html>

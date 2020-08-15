@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="orgacao" value="#{orgaoBean.acao}" />
+			<f:viewParam name="orgId" value="#{orgaoBean.codigo}" />
+
+			<f:event listener="#{orgaoBean.carregarDados}" type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<h:form id="formCadOrgao">
+
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Cadastro Orgão" />
+				</f:facet>
+			</p:toolbar>
+
+			<h:panelGrid id="pnlOrgaoDados" columns="3">
+
+				<p:outputLabel value="Nome:" />
+				<p:inputText maxlength="50" size="30"
+					value="#{orgaoBean.orgaoCadastro.nome}"
+					readonly="#{orgaoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+				<p:spacer />
+
+				<p:outputLabel value="CNPJ:" />
+				<p:inputMask mask="99.999.999/9999-99" size="14"
+					value="#{orgaoBean.orgaoCadastro.cnpj}"
+					readonly="#{orgaoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputMask>
+				<p:spacer />
+
+				<p:outputLabel value="Repositório de arquivos:" />
+				<p:inputText maxlength="100" size="30"
+					value="#{orgaoBean.orgaoCadastro.repositorio}"
+					readonly="#{orgaoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+				<p:spacer />
+				
+				<p:outputLabel value="Email:" />
+				<p:inputText maxlength="100" size="30"
+					value="#{orgaoBean.orgaoCadastro.email}"
+					readonly="#{orgaoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+				<p:spacer/>
+				
+				<p:outputLabel value="Client_id:" />
+				<p:inputText maxlength="2048" size="30"
+					value="#{orgaoBean.orgaoCadastro.clientId}"
+					readonly="#{orgaoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+				<p:spacer />
+				
+				<p:outputLabel value="Client_secret:" />
+				<p:inputText maxlength="2048" size="30"
+					value="#{orgaoBean.orgaoCadastro.clientSecret}"
+					readonly="#{orgaoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+				<p:spacer />
+				
+				<p:outputLabel value="Token de acesso:" />
+				<p:inputText maxlength="2048" size="30"
+					value="#{orgaoBean.orgaoCadastro.tokenAcesso}"
+					readonly="#{orgaoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+				<p:spacer />
+
+				<p:outputLabel value="Endereço:" />
+				<p:selectOneMenu id="listaEnderecos"
+					value="#{orgaoBean.orgaoCadastro.endereco}"
+					converter="enderecoConverter" filter="true"
+					filterMatchMode="startsWith" style="width: 88%;">
+					<f:selectItem itemValue="" itemLabel="Selecione o Endereço" />
+					<f:selectItems value="#{orgaoBean.listaEnderecos}" var="endereco"
+						itemValue="#{endereco}"
+						itemLabel="#{endereco.rua}, #{endereco.numero}" />
+					<f:validateBean />
+				</p:selectOneMenu>
+				<p:commandButton value="Novo" icon="ui-icon-plus"
+					oncomplete="PF ('DlgEndereco').show();" />
+
+				<p:outputLabel value="Data de Vigência:" />
+				<p:calendar value="#{orgaoBean.orgaoCadastro.dataVigencia}"
+					pattern="dd/MM/yyyy" mask="true" mode="popup"
+					readonly="#{orgaoBean.acao == 'excluir'}" locale="pt"
+					timeZone="GMT-3">
+					<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+					<f:validateBean />
+				</p:calendar>
+				<p:spacer />
+				
+				<p:outputLabel value="Registro:" />
+				<p:inputText maxlength="50" size="30"
+					value="#{orgaoBean.orgaoCadastro.registro}"
+					readonly="#{orgaoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+				<p:spacer />
+				
+				<p:outputLabel value="Status: " />
+				<p:selectOneMenu id="listaStatus"
+					value="#{orgaoBean.orgaoCadastro.status}">
+					<f:selectItem itemValue="" itemLabel="Selecione o Status" />
+					<f:selectItem itemValue="A" itemLabel="Ativo" />
+					<f:selectItem itemValue="I" itemLabel="Inativo" />					
+					<f:validateBean />
+				</p:selectOneMenu>
+			</h:panelGrid>
+
+			<h:panelGrid columns="5">
+				<p:commandButton value="Novo" icon="ui-icon-plus"
+					actionListener="#{orgao.novo}" update=":formCadOrgao:pnlOrgaoDados"
+					rendered="#{orgaoBean.acao == 'novo'}" />
+				<p:commandButton value="Gravar" icon="ui-icon-disk"
+					actionListener="#{orgaoBean.salvar}"
+					update=":msgGlobal :formCadOrgao:pnlOrgaoDados"
+					rendered="#{orgaoBean.acao == 'novo'}" />
+				<p:button value="Voltar" icon="ui-icon-arrowreturnthick-1-w"
+					outcome="/pages/orgao/orgaoPesquisa.xhtml?faces-redirect=true" />
+				<p:commandButton value="Gravar" icon="ui-icon-disk"
+					actionListener="#{orgaoBean.editar}" update=":msgGlobal"
+					rendered="#{orgaoBean.acao == 'editar'}" />
+				<p:commandButton value="Excluir" icon="ui-icon-close"
+					oncomplete="PF('confirmacaoExcluir').show();"
+					rendered="#{orgaoBean.acao == 'excluir'}" />
+			</h:panelGrid>
+		</h:form>
+
+		<!-- Dialogo para o cadastro do endereço -->
+		<p:dialog closable="true" draggable="true" modal="true"
+			resizable="false" header="Cadastro Endereço" widgetVar="DlgEndereco"
+			appendTo="@(body)">
+			<h:form id="formCadEndereco">
+				<h:panelGrid id="pnlEnderecoDados" columns="2">
+					<p:outputLabel value="Rua:" />
+					<p:inputText maxlength="50" size="30"
+						value="#{enderecoBean.enderecoCadastrado.rua}"
+						readonly="#{enderecoBean.acao == 'excluir'}">
+						<f:validateBean />
+					</p:inputText>
+
+					<p:outputLabel value="Número:" />
+					<p:inputText maxlength="30" size="30"
+						value="#{enderecoBean.enderecoCadastrado.numero}"
+						readonly="#{enderecoBean.acao == 'excluir'}">
+						<f:validateBean />
+					</p:inputText>
+
+					<p:outputLabel value="Bairro:" />
+					<p:inputText maxlength="50" size="30"
+						value="#{enderecoBean.enderecoCadastrado.bairro}"
+						readonly="#{enderecoBean.acao == 'excluir'}">
+						<f:validateBean />
+					</p:inputText>
+
+					<p:outputLabel value="CEP:" />
+					<p:inputMask mask="99999-999" size="10"
+						value="#{enderecoBean.enderecoCadastrado.cep}"
+						readonly="#{enderecoBean.acao == 'excluir'}">
+						<f:validateBean />
+					</p:inputMask>
+
+					<p:outputLabel value="Cidade:" />
+					<p:inputText maxlength="50" size="30"
+						value="#{enderecoBean.enderecoCadastrado.cidade}"
+						readonly="#{enderecoBean.acao == 'excluir'}">
+						<f:validateBean />
+					</p:inputText>
+
+					<p:outputLabel value="Estado:" />
+					<p:inputText maxlength="30" size="30"
+						value="#{enderecoBean.enderecoCadastrado.estado}"
+						readonly="#{enderecoBean.acao == 'excluir'}">
+						<f:validateBean />
+					</p:inputText>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Gravar" icon="ui-icon-disk"
+						actionListener="#{enderecoBean.salvar}"
+						update=":msgGlobal :formCadOrgao:listaEnderecos"
+						oncomplete="PF('DlgEndereco').hide();" />
+
+					<p:commandButton value="Voltar" icon="ui-icon-arrowreturnthick-1-w"
+						onclick="PF('DlgEndereco').hide();" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
+		<!-- MENSAGEM PARA CONFIRMAÇÃO DE EXCLUSÃO -->
+		<p:confirmDialog id="confirmacaoDialogExcluir" appendTo="@(body)"
+			message="Tem certeza que deseja EXCLUIR este Orgão?"
+			header="Confirmação" severity="alert" widgetVar="confirmacaoExcluir">
+			<p:commandButton id="btnConfirmExcluir" value="Sim"
+				oncomplete="PF('confirmacaoExcluir').hide()"
+				icon="ui-icon-circle-check" action="#{orgaoBean.excluir}"
+				update=":msgGlobal" />
+			<p:commandButton id="btnDeclineExcluir" value="Cancelar"
+				onclick="PF('confirmacaoExcluir').hide()" type="button"
+				icon="ui-icon-cancel" />
+		</p:confirmDialog>
+	</ui:define>
+
+</ui:composition>
+
+</html>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="atoacao" value="#{atosBean.acao}" />
+			<f:viewParam name="atoId" value="#{atosBean.codigo}" />
+
+			<f:event listener="#{atosBean.carregarDados}" type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<h:form id="formCadAto">
+
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Cadastro Ato" />
+				</f:facet>
+			</p:toolbar>
+
+			<h:panelGrid id="pnlAtoDados" columns="2">
+
+				<p:outputLabel value="Descrição:" />
+				<p:inputText maxlength="200" size="50"
+					value="#{atosBean.atosCadastro.descricao}"
+					readonly="#{atosBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+
+				<p:outputLabel value="Categoria: " />
+				<p:selectOneMenu id="listaCategoria"
+					value="#{atosBean.atosCadastro.categoria}">
+					<f:selectItem itemValue="" itemLabel="Selecione o tipo do Parecer" />
+					<f:selectItem itemValue="consumo" itemLabel="Consumo" />
+					<f:selectItem itemValue="serviços Pessoa Fisica"
+						itemLabel="Serviços Pessoa Física" />
+					<f:selectItem itemValue="serviços Pessoa Juridica"
+						itemLabel="Serviços Pessoa Jurídica" />
+					<f:selectItem itemValue="diarias" itemLabel="Diárias" />
+					<f:selectItem itemValue="aluguel Pessoa Fisica"
+						itemLabel="Aluguel Pessoa Física" />
+					<f:selectItem itemValue="aluguel Pessoa Juridica"
+						itemLabel="Aluguel Pessoa Jurídica" />
+					<f:selectItem itemValue="locação de veiculos"
+						itemLabel="Locação de veículos" />
+					<f:selectItem itemValue="obras" itemLabel="Obras" />
+					<f:selectItem itemValue="publicidade" itemLabel="Publicidade" />
+					<f:selectItem itemValue="passagens" itemLabel="Passagens" />
+					<f:selectItem itemValue="hospedagem" itemLabel="Hospedagem" />
+					<f:selectItem itemValue="contratação artistica Pessoa Fisica"
+						itemLabel="Contratação artística Pessoa Física" />
+					<f:selectItem itemValue="contratação artistica Pessoa Juridica"
+						itemLabel="Contratação artística Pessoa Jurídica" />
+					<f:selectItem itemValue="desapropriação" itemLabel="Desapropriação" />
+					<f:selectItem itemValue="aluguel social e ajuda de custo"
+						itemLabel="Aluguel social e ajuda de custo" />
+					<f:selectItem itemValue="bolsa atleta" itemLabel="Bolsa Atleta" />
+					<f:selectItem itemValue="Ordem Judicial" itemLabel="Ordem Judicial" />
+					<f:selectItem itemValue="Terceirizada" itemLabel="Terceirizada" />
+					<f:selectItem itemValue="Patrocínio" itemLabel="Patrocínio" />
+					<f:selectItem itemValue="Consultoria" itemLabel="Consultoria" />
+					<f:selectItem itemValue="Ajuda de Custo" itemLabel="Ajuda de Custo" />
+					<f:selectItem itemValue="Aluguel Social" itemLabel="Aluguel Social" />
+					<f:selectItem itemValue="Ressarcimento de Despesa" itemLabel="Ressarcimento de Despesa" />
+					<f:selectItem itemValue="Outros" itemLabel="Outros" />
+					<f:validateBean />
+				</p:selectOneMenu>
+				
+				<p:outputLabel value="Status: " />
+				<p:selectOneMenu id="listaStatus"
+					value="#{atosBean.atosCadastro.status}">
+					<f:selectItem itemValue="" itemLabel="Selecione o Status" />
+					<f:selectItem itemValue="Aplicar" itemLabel="Aplicar" />
+					<f:selectItem itemValue="Omitir" itemLabel="Omitir" />					
+					<f:validateBean />
+				</p:selectOneMenu>
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="5">
+				<p:commandButton value="Novo" icon="ui-icon-plus"
+					actionListener="#{atosBean.novo}" update=":formCadAto:pnlAtoDados"
+					rendered="#{atosBean.acao == 'novo'}" />
+				<p:commandButton value="Gravar" icon="ui-icon-disk"
+					actionListener="#{atosBean.salvar}"
+					update=":msgGlobal :formCadAto:pnlAtoDados"
+					rendered="#{atosBean.acao == 'novo' and autenticacaoBean.orgaoLogado.status == 'A'}" />
+				<p:button value="Voltar" icon="ui-icon-arrowreturnthick-1-w"
+					outcome="/pages/ato/atoPesquisa.xhtml?faces-redirect=true" />
+				<p:commandButton value="Gravar" icon="ui-icon-disk"
+					actionListener="#{atosBean.editar}" update=":msgGlobal"
+					rendered="#{atosBean.acao == 'editar'}" />
+				<p:commandButton value="Excluir" icon="ui-icon-close"
+					oncomplete="PF('confirmacaoExcluir').show();"
+					rendered="#{atosBean.acao == 'excluir'}" />
+			</h:panelGrid>
+		</h:form>
+
+		<!-- MENSAGEM PARA CONFIRMAÇÃO DE EXCLUSÃO -->
+		<p:confirmDialog id="confirmacaoDialogExcluir" appendTo="@(body)"
+			message="Tem certeza que deseja EXCLUIR este Ator?"
+			header="Confirmação" severity="alert" widgetVar="confirmacaoExcluir">
+			<p:commandButton id="btnConfirmExcluir" value="Sim"
+				oncomplete="PF('confirmacaoExcluir').hide()"
+				icon="ui-icon-circle-check" action="#{atosBean.excluir}"
+				update=":msgGlobal" />
+			<p:commandButton id="btnDeclineExcluir" value="Cancelar"
+				onclick="PF('confirmacaoExcluir').hide()" type="button"
+				icon="ui-icon-cancel" />
+		</p:confirmDialog>
+	</ui:define>
+
+</ui:composition>
+
+</html>

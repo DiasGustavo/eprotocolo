@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:event listener="#{licitacaoBean.listar}" type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form>
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Pesquisa de Licitação" />
+				</f:facet>
+			</p:toolbar>
+
+			<p:dataTable emptyMessage="Nenhum registro encontrado."
+				value="#{licitacaoBean.listaLicitacoes}"
+				filteredValue="#{licitacaoBean.listaLicitacoesFiltradas}" var="licitacao" rows="6"
+				paginator="true" rowStyleClass="#{licitacao.status == 'Ativa' ? 'destaque': null}">
+				<f:facet name="footer">
+					<p:button value="Novo" icon="ui-icon-plus"
+						outcome="/pages/licitacao/licitacaoCadastro.xhtml?faces-redirect=true">
+						<f:param name="licacao" value="novo" />
+					</p:button>
+				</f:facet>
+				<p:column headerText="Código" filterBy="#{licitacao.id}"
+					filterStyle="max-width: 60%; min-width: 60%;"
+					style="width: 3%; text-align: center;">
+					<h:outputText value="#{licitacao.id}" />
+				</p:column>
+
+				<p:column headerText="Descrição" filterBy="#{licitacao.objeto}"
+					filterStyle="max-width: 97%; min-width: 97%;"
+					style="width: 12%; text-align: center;">
+					<h:outputText value="#{licitacao.objeto}" />
+				</p:column>
+				
+				<p:column headerText="Empresa Vencedora" filterBy="#{licitacao.empresa.razao}"
+					filterStyle="max-width: 97%; min-width: 97%;"
+					style="width: 12%; text-align: center;">
+					<h:outputText value="#{licitacao.empresa.razao}" />
+				</p:column>
+				
+				<p:column headerText="Status" filterBy="#{licitacao.status}"
+					filterStyle="max-width: 97%; min-width: 97%;"
+					style="width: 8%; text-align: center;">
+					<h:outputText value="#{licitacao.status}" />
+				</p:column>				
+
+				<p:column headerText="Opções" style="width: 8%; text-align: center;">
+					<p:button value="Editar" icon="	ui-icon-gear"
+						outcome="/pages/licitacao/licitacaoCadastro.xhtml?faces-redirect=true">
+						<f:param name="licId" value="#{licitacao.id}" />
+						<f:param name="licacao" value="editar" />
+					</p:button>
+					<p:button value="Excluir" icon="ui-icon-close"
+						outcome="/pages/licitacao/licitacaoCadastro.xhtml?faces-redirect=true">
+						<f:param name="licId" value="#{licitacao.id}" />
+						<f:param name="licacao" value="excluir" />
+					</p:button>
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+
+</html>

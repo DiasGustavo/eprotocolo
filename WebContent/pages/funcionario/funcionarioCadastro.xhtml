@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="funacao" value="#{funcionarioBean.acao}" />
+			<f:viewParam name="funId" value="#{funcionarioBean.codigo}" />
+
+			<f:event listener="#{funcionarioBean.carregarDados}"
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<h:form id="formCadFuncionario">
+
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Cadastro Colaborador" />
+				</f:facet>
+			</p:toolbar>
+
+			<h:panelGrid id="pnlFuncionarioDados" columns="2">
+
+				<p:outputLabel value="Nome:" />
+				<p:inputText maxlength="50" size="30"
+					value="#{funcionarioBean.funCadastro.nome}"
+					readonly="#{funcionarioBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+
+				<p:outputLabel value="Matrícula:" />
+				<p:inputText maxlength="10" size="10"
+					value="#{funcionarioBean.funCadastro.matricula}"
+					readonly="#{funcionarioBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+
+				<p:outputLabel value="Função: "
+					rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'administrador'}" />
+				<p:selectOneMenu id="listaFuncoes"
+					value="#{funcionarioBean.funCadastro.funcao}"
+					rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'administrador'}">
+					<f:selectItem itemValue="" itemLabel="Selecione a Função" />
+					<f:selectItem itemValue="servidor" itemLabel="servidor" />
+					<f:selectItem itemValue="secretário(a)" itemLabel="secretário(a)" />
+					<f:selectItem itemValue="digitador" itemLabel="digitador" />
+					<f:selectItem itemValue="administrador" itemLabel="administrador" />
+					<f:validateBean />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Orgão:"
+					rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'administrador'}" />
+				<p:selectOneMenu id="listaOrgaos"
+					value="#{funcionarioBean.funCadastro.orgao}"
+					converter="orgaoConverter" filter="true"
+					filterMatchMode="startsWith" style="width: 99%;"
+					rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'administrador'}">
+					<f:selectItem itemValue="" itemLabel="Selecione o Orgão" />
+					<f:selectItems value="#{funcionarioBean.listaOrgaos}" var="orgao"
+						itemValue="#{orgao}" itemLabel="#{orgao.nome}" />
+					<f:validateBean />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Telefone:" />
+				<p:inputMask mask="(99)9999-9999" size="13"
+					value="#{funcionarioBean.funCadastro.telefone}"
+					readonly="#{funcionarioBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputMask>
+
+				<p:outputLabel value="Email:" />
+				<p:inputText maxlength="50" size="30"
+					value="#{funcionarioBean.funCadastro.email}"
+					readonly="#{funcionarioBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+
+				<p:outputLabel value="Login:" />
+				<p:inputText maxlength="50" size="30"
+					value="#{funcionarioBean.funCadastro.login}"
+					readonly="#{funcionarioBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+
+				<p:outputLabel value="Senha:" />
+				<p:password maxlength="50" size="30"
+					value="#{funcionarioBean.funCadastro.senha}"
+					readonly="#{funcionarioBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:password>
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="5">
+				<p:commandButton value="Novo" icon="ui-icon-plus"
+					actionListener="#{funcionarioBean.novo}"
+					update=":formCadFuncionario:pnlFuncionarioDados"
+					rendered="#{funcionarioBean.acao == 'novo'}" />
+				<p:commandButton value="Gravar" icon="ui-icon-disk"
+					actionListener="#{funcionarioBean.salvar}"
+					update=":msgGlobal :formCadFuncionario:pnlFuncionarioDados"
+					rendered="#{funcionarioBean.acao == 'novo'}" />
+				<p:button value="Voltar" icon="ui-icon-arrowreturnthick-1-w"
+					outcome="/pages/funcionario/funcionarioPesquisa.xhtml?faces-redirect=true" />
+				<p:commandButton value="Gravar" icon="ui-icon-disk"
+					actionListener="#{funcionarioBean.editar}" update=":msgGlobal"
+					rendered="#{funcionarioBean.acao == 'editar'}" />
+				<p:commandButton value="Excluir" icon="ui-icon-close"
+					oncomplete="PF('confirmacaoExcluir').show();"
+					rendered="#{funcionarioBean.acao == 'excluir'}" />
+			</h:panelGrid>
+		</h:form>
+
+		<!-- MENSAGEM PARA CONFIRMAÇÃO DE EXCLUSÃO -->
+		<p:confirmDialog id="confirmacaoDialogExcluir" appendTo="@(body)"
+			message="Tem certeza que deseja EXCLUIR este Funcionário?"
+			header="Confirmação" severity="alert" widgetVar="confirmacaoExcluir">
+			<p:commandButton id="btnConfirmExcluir" value="Sim"
+				oncomplete="PF('confirmacaoExcluir').hide()"
+				icon="ui-icon-circle-check" action="#{funcionarioBean.excluir}"
+				update=":msgGlobal" />
+			<p:commandButton id="btnDeclineExcluir" value="Cancelar"
+				onclick="PF('confirmacaoExcluir').hide()" type="button"
+				icon="ui-icon-cancel" />
+		</p:confirmDialog>
+	</ui:define>
+
+</ui:composition>
+
+</html>

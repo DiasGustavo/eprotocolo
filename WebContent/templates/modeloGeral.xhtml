@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:insert name="metadata" />
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Protocolo de Processo CI</title>
+	<h:outputStylesheet library="css" name="estilos.css" />	
+	<h:outputScript library="js" name="locale-primefaces.js" />
+	<h:outputScript library="js" name="primefaces.js" />
+	
+
+</h:head>
+<h:body>
+	<!-- Mensagem Geral -->
+	<p:growl id="msgGlobal" sticky="true" />
+
+	<p:layout fullPage="true">
+		<!-- topo -->
+		<p:layoutUnit size="110" position="north" resizable="false"
+			collapsible="false" closable="false" style="text-align: center;">
+			<p:graphicImage styleClass="banner"
+				value="/resources/images/banner.semMega.png"></p:graphicImage>
+
+		</p:layoutUnit>
+
+		<!-- rodapé -->
+		<p:layoutUnit header="Desenvolvido por © SCI Assessoria  "
+			position="south" resizable="false" collapsible="false"
+			closable="false">
+		</p:layoutUnit>
+
+		<!-- menu -->
+		<p:layoutUnit size="200" position="west" resizable="false"
+			collapsible="false" closable="false">
+			<h:form id="formPrincipal">
+				<p:panelMenu id="pnlMenuPrincipal">
+					<p:submenu label="Sistema">
+						<p:menuitem value="Autenticação"
+							outcome="/pages/autenticacao.xhtml"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao == null}" />
+						<p:menuitem value="Principal" outcome="/pages/principal.xhtml"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao != null}" />
+						<p:menuitem value="Sair"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao != null}"
+							action="#{autenticacaoBean.sair}" />
+					</p:submenu>
+					<p:submenu label="Cadastros"
+						rendered="#{autenticacaoBean.funcionarioLogado.funcao != null}">
+						<p:menuitem value="Orgão"
+							outcome="/pages/orgao/orgaoPesquisa.xhtml"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'administrador'}" />
+						<p:menuitem value="Secretaria"
+							outcome="/pages/secretaria/secretariaPesquisa.xhtml"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'administrador'}" />
+						<p:menuitem value="Tipo de Licitação"
+							outcome="/pages/tipoLicitacao/tipoLicitacaoPesquisa.xhtml"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'administrador'}" />						
+						<p:menuitem value="Modalidade de Licitação"
+							outcome="/pages/modalidadeLicitacao/modalidadeLicitacaoPesquisa.xhtml"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'administrador'}" />
+						<p:menuitem value="Licitação"
+							outcome="/pages/licitacao/licitacaoPesquisa.xhtml"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'administrador'}" />
+						<p:menuitem value="Favorecido"
+							outcome="/pages/empresa/empresaPesquisa.xhtml" />
+						<p:menuitem value="Colaborador"
+							outcome="/pages/funcionario/funcionarioPesquisa.xhtml" />
+						<p:menuitem value="Atos" outcome="/pages/ato/atoPesquisa.xhtml" />
+						<p:menuitem value="Processo"
+							outcome="/pages/documento/documentoPesquisa.xhtml" />
+						<p:menuitem value="Nota de Empenho"
+							outcome="/pages/notaempenho/notaPesquisa.xhtml" />
+
+					</p:submenu>
+					<p:submenu label="Parecer"
+						rendered="#{autenticacaoBean.funcionarioLogado.funcao != null}">
+						<p:menuitem value="Parecer"
+							outcome="/pages/parecer/parecerPesquisa.xhtml" />
+					</p:submenu>
+					<p:submenu label="Nota Técnica"
+						rendered="#{autenticacaoBean.funcionarioLogado.funcao != null}">
+						<p:menuitem value="Nota Técnica"
+							outcome="/pages/notaTecnica/notaTecnicaPesquisa.xhtml" />
+					</p:submenu>
+
+					<p:submenu label="Relatórios"
+						rendered="#{autenticacaoBean.funcionarioLogado.funcao != null}">
+						<p:menuitem value="Documentos"
+							outcome="/pages/reports/relatorio_documentos.xhtml" />
+						<p:menuitem value="Demonstrativos"
+							outcome="/pages/reports/demonstrativo.xhtml" />
+					</p:submenu>
+					<p:submenu label="Ajuda"
+						rendered="#{autenticacaoBean.funcionarioLogado.funcao != null}">
+						<p:menuitem value="Manual" ajax="false"
+							action="#{visualizarArquivoBean.abrirManual}" target="_blank" />
+
+						<p:menuitem value="Suporte" url="/suporte/showmypc.jnlp" />
+					</p:submenu>
+
+					<p:submenu label="Configurações"
+						rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'administrador'}">
+						<p:menuitem value="Registros"
+							outcome="/pages/controle/registroPesquisa.xhtml"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'administrador'}" />
+					</p:submenu>
+				</p:panelMenu>
+			</h:form>
+		</p:layoutUnit>
+
+		<!-- área de Trabalho -->
+		<p:layoutUnit position="center" resizable="false" collapsible="false"
+			closable="false">
+			<ui:insert name="conteudo" />
+		</p:layoutUnit>
+	</p:layout>
+</h:body>
+</html>

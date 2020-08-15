@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:event listener="#{documentoBean.listar}" type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form>
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Pesquisa Processos" />
+				</f:facet>
+
+				<f:facet name="right">
+					<h:commandLink>
+						<p:graphicImage library="images" name="excel.png" width="24" />
+						<p:dataExporter type="xls" target="tblDocumentos"
+							fileName="processos" />
+					</h:commandLink>
+
+					<h:commandLink>
+						<p:graphicImage library="images" name="pdf.png" width="24" />
+						<p:dataExporter type="pdf" target="tblDocumentos"
+							fileName="processos" encoding="ISO-8859-1" />
+					</h:commandLink>
+				</f:facet>
+
+			</p:toolbar>
+
+			<p:dataTable id="tblDocumentos"
+				emptyMessage="Nenhum registro encontrado."
+				value="#{documentoBean.listaDocumentos}"
+				filteredValue="#{documentoBean.listaDocumentosFiltrados}"
+				var="documento" rows="5" paginator="true"
+				rowStyleClass="#{documento.status == 'analisado' ? 'status_saida': null}">
+
+				<f:facet name="footer">
+					<p:button value="Novo" icon="ui-icon-plus"
+						outcome="/pages/documento/documentoCadastro.xhtml?faces-redirect=true">
+						<f:param name="docacao" value="novo" />
+					</p:button>
+				</f:facet>
+				<p:column headerText="Código" sortBy="#{documento.id}"
+					filterBy="#{documento.id}"
+					filterStyle="max-width: 60%; min-width: 60%;"
+					style="width: 4%; text-align: center;">
+					<h:outputText value="#{documento.id}" />
+				</p:column>
+
+				<!--  <p:column headerText="Processo" filterBy="#{documento.processo}"
+					filterStyle="max-width: 60%; min-width: 60%;"
+					style="width: 4%; text-align: center;">
+					<h:outputText value="#{documento.processo}" />
+				</p:column>-->
+
+				<p:column headerText="Responsável"
+					filterBy="#{documento.responsavel.nome}"
+					filterStyle="max-width: 70%; min-width: 70%;"
+					style="width: 8%; text-align: center;">
+					<h:outputText value="#{documento.responsavel.nome}" />
+				</p:column>
+
+				<p:column headerText="Secretaria" filterBy="#{documento.secretaria.nome}"
+					filterStyle="max-width: 70%; min-width: 70%;"
+					style="width: 5%; text-align: center;">
+					<h:outputText value="#{documento.secretaria.nome}" />
+				</p:column>
+
+				<p:column headerText="Favorecido"
+					filterBy="#{documento.empresa.razao}"
+					filterStyle="max-width: 70%; min-width: 70%;"
+					style="width: 6%; text-align: center;">
+					<h:outputText value="#{documento.empresa.razao}" />
+				</p:column>
+
+				<p:column headerText="Valor" style="width: 3%; text-align: center;"
+					filterBy="#{documento.valor}"
+					filterStyle="max-width: 70%; min-width: 70%;">
+					<h:outputText value="R$ #{documento.valor}">
+						<f:convertNumber pattern="0.00" />
+					</h:outputText>
+
+				</p:column>
+
+				<p:column headerText="Entrada"
+					style="width: 4%; text-align: center;">
+					<h:outputText value="#{documento.dataEntrada}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Saída" style="width: 4%; text-align: center;">
+					<h:outputText value="#{documento.dataSaida}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column sortBy="#{documento.status}" headerText="Status"
+					style="width: 4%; text-align: center;">
+					<h:outputText value="#{documento.status}" />
+				</p:column>				
+
+				<p:column headerText="Opções" style="width:10%; text-align: center;"
+					exportable="false">
+					<p:button value="Editar" icon="	ui-icon-gear"
+						outcome="/pages/documento/documentoCadastro.xhtml?faces-redirect=true">
+						<f:param name="docId" value="#{documento.id}" />
+						<f:param name="docacao" value="editar" />
+					</p:button>
+					<p:button value="Excluir" icon="ui-icon-close"
+						outcome="/pages/documento/documentoCadastro.xhtml?faces-redirect=true"
+						rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'administrador' or autenticacaoBean.funcionarioLogado.funcao == 'digitador'}">
+						<f:param name="docId" value="#{documento.id}" />
+						<f:param name="docacao" value="excluir" />
+					</p:button>
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+
+</html>
