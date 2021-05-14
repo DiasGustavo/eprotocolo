@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="formGrafico">
+			<p:outputLabel value="Data Incial:" />
+			<p:calendar style="width: 200px" value="#{demonstrativoBean.dataInicio}"
+				pattern="dd/MM/yyyy" mask="true" mode="popup" locale="pt">
+				<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+				<f:validateBean />
+			</p:calendar>
+
+			<p:outputLabel value="Data Final:" />
+			<p:calendar style="width: 200px" value="#{demonstrativoBean.dataFim}"
+				pattern="dd/MM/yyyy" mask="true" mode="popup" locale="pt">
+				<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+				<f:validateBean />
+			</p:calendar>
+			<p:commandButton value="Gráfico" icon="ui-icon-disk" actionListener="#{demonstrativoBean.demonstrativos}"
+					update=":formGrafico:grafico" ajax="false" />
+			
+			<p:chart id="grafico" type="line" model="#{demonstrativoBean.lineGrafico}"
+				style="height: 500px; width: 880px" />
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+
+</html>

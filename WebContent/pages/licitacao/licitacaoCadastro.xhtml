@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="licacao" value="#{licitacaoBean.acao}" />
+			<f:viewParam name="licId" value="#{licitacaoBean.codigo}" />
+
+			<f:event listener="#{licitacaoBean.carregarDados}" type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<h:form id="formCadLicitacao">
+
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Cadastro de Licitação" />
+				</f:facet>
+			</p:toolbar>
+
+			<h:panelGrid id="pnlLicitacaoDados" columns="2">
+			
+				<p:outputLabel value="Modalidade:" />
+				<h:panelGrid columns="2" >
+					<p:selectOneMenu id="listaModalidade"
+						value="#{licitacaoBean.licitacaoCadastro.modalidade}"
+						converter="modalidadeLicitacaoConverter" filter="true"
+						filterMatchMode="startsWith" style="width: 200px;">
+						<f:selectItem itemValue="" itemLabel="Selecione a modalidade" />
+						<f:selectItems value="#{licitacaoBean.modalidadesLicitacao}"
+							var="modalidade" itemValue="#{modalidade}"
+							itemLabel="#{modalidade.descricao}"/>
+						<f:validateBean />
+					</p:selectOneMenu>
+					<p:commandButton  id="addModalidade" style="margin-right:10px;" icon="ui-icon-plus" 
+									oncomplete="PF ('DlgModalidade').show();" />
+				</h:panelGrid>
+				
+				<p:outputLabel value="Tipo:" />
+				<h:panelGrid columns="2">
+					<p:selectOneMenu id="listaTipo"
+						value="#{licitacaoBean.licitacaoCadastro.tipo}"
+						converter="tipoLicitacaoConverter" filter="true"
+						filterMatchMode="startsWith" style="width: 200px;">
+						<f:selectItem itemValue="" itemLabel="Selecione o tipo" />
+						<f:selectItems value="#{licitacaoBean.tiposLicitacao}"
+							var="tipo" itemValue="#{tipo}"
+							itemLabel="#{tipo.descricao}"/>
+						<f:validateBean />
+					</p:selectOneMenu>
+					<p:commandButton  id="addTipo" style="margin-right:10px;" icon="ui-icon-plus" 
+							oncomplete="PF ('DlgTipo').show();" />
+				</h:panelGrid>
+				
+				<p:outputLabel value="Empresa Vencedora:" />
+				<h:panelGrid columns="2">
+					<p:selectOneMenu id="listaEmpresa"
+						value="#{licitacaoBean.licitacaoCadastro.empresa}"
+						converter="empresaConverter" filter="true"
+						filterMatchMode="startsWith" style="width: 200px;">
+						<f:selectItem itemValue="" itemLabel="Selecione a empresa" />
+						<f:selectItems value="#{licitacaoBean.listaEmpresas}"
+							var="empresa" itemValue="#{empresa}"
+							itemLabel="#{empresa.razao}"/>
+						<f:validateBean />
+					</p:selectOneMenu>
+					<p:commandButton  id="addEmpresa" style="margin-right:10px;" icon="ui-icon-plus" 
+							oncomplete="PF ('DlgEmpresa').show();" />
+				</h:panelGrid>
+				
+				<p:outputLabel value="Objeto:" />
+				<p:inputTextarea class="textarea" maxlength="1024" cols="60"
+					value="#{licitacaoBean.licitacaoCadastro.objeto}"
+					readonly="#{licitacaoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputTextarea>
+				
+				
+				<p:outputLabel value="Valor:" />
+				<p:inputText maxlength="10" size="10"
+					value="#{licitacaoBean.licitacaoCadastro.valor}"
+					readonly="#{licitacaoBean.acao == 'excluir'}"
+					converterMessage="Informe uma valor válido para o campo preço.">
+					<f:convertNumber pattern="0.00" />
+					<f:validateBean />
+				</p:inputText>
+				
+				
+				<p:outputLabel value="Data de Assinatura do Contrato:" />
+				<p:calendar value="#{licitacaoBean.licitacaoCadastro.dataAssinaturaContrato}"
+					pattern="dd/MM/yyyy" mask="true" mode="popup"
+					readonly="#{licitacaoBean.acao == 'excluir'}" locale="pt"
+					timeZone="GMT-3">
+					<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+					<f:validateBean />
+				</p:calendar>
+				
+				
+				<p:outputLabel value="Prazo de Execução:" />
+				<p:inputText maxlength="20" size="20"
+					value="#{licitacaoBean.licitacaoCadastro.prazoExecucao}"
+					readonly="#{licitacaoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+			
+				
+				<p:outputLabel value="Data de Vencimento:" />
+				<p:calendar value="#{licitacaoBean.licitacaoCadastro.dataVencimento}"
+					pattern="dd/MM/yyyy" mask="true" mode="popup"
+					readonly="#{licitacaoBean.acao == 'excluir'}" locale="pt"
+					timeZone="GMT-3">
+					<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+					<f:validateBean />
+				</p:calendar>
+		
+								
+				<p:outputLabel value="Status: " />
+				<p:selectOneMenu id="listaStatus"
+					value="#{licitacaoBean.licitacaoCadastro.status}">
+					<f:selectItem itemValue="" itemLabel="Selecione o Status" />
+					<f:selectItem itemValue="Ativa" itemLabel="Ativa" />
+					<f:selectItem itemValue="Inativa" itemLabel="Inativa" />					
+					<f:validateBean />
+				</p:selectOneMenu>
+				
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="5">
+				<p:commandButton value="Novo" icon="ui-icon-plus"
+					actionListener="#{licitacaoBean.novo}" update=":formCadLicitacao:pnlLicitacaoDados"
+					rendered="#{licitacaoBean.acao == 'novo'}" />
+				<p:commandButton value="Gravar" icon="ui-icon-disk"
+					actionListener="#{licitacaoBean.salvar}"
+					update=":msgGlobal :formCadLicitacao:pnlLicitacaoDados"
+					rendered="#{licitacaoBean.acao == 'novo' and autenticacaoBean.orgaoLogado.status == 'A'}" />
+				<p:button value="Voltar" icon="ui-icon-arrowreturnthick-1-w"
+					outcome="/pages/licitacao/licitacaoPesquisa.xhtml?faces-redirect=true" />
+				<p:commandButton value="Gravar" icon="ui-icon-disk"
+					actionListener="#{licitacaoBean.editar}" update=":msgGlobal"
+					rendered="#{licitacaoBean.acao == 'editar'}" />
+				<p:commandButton value="Excluir" icon="ui-icon-close"
+					oncomplete="PF('confirmacaoExcluir').show();"
+					rendered="#{licitacaoBean.acao == 'excluir'}" />
+			</h:panelGrid>
+		</h:form>
+
+		<!-- MENSAGEM PARA CONFIRMAÇÃO DE EXCLUSÃO -->
+		<p:confirmDialog id="confirmacaoDialogExcluir" appendTo="@(body)"
+			message="Tem certeza que deseja EXCLUIR esta Licitação?"
+			header="Confirmação" severity="alert" widgetVar="confirmacaoExcluir">
+			<p:commandButton id="btnConfirmExcluir" value="Sim"
+				oncomplete="PF('confirmacaoExcluir').hide()"
+				icon="ui-icon-circle-check" action="#{licitacaoBean.excluir}"
+				update=":msgGlobal" />
+			<p:commandButton id="btnDeclineExcluir" value="Cancelar"
+				onclick="PF('confirmacaoExcluir').hide()" type="button"
+				icon="ui-icon-cancel" />
+		</p:confirmDialog>
+		
+		<!-- Dialogo para o cadastro do Tipo de Licitação -->
+		<p:dialog closable="true" draggable="true" modal="true"
+			resizable="false" header="Cadastro Tipo de Licitação" widgetVar="DlgTipo"
+			appendTo="@(body)">
+			<h:form id="formCadTipo">		
+
+			<h:panelGrid id="pnlTipoDados" columns="2">
+
+				<p:outputLabel value="Descrição:" />
+				<p:inputText maxlength="200" size="50"
+					value="#{tipoLicitacaoBean.tipoCadastro.descricao}"
+					readonly="#{tipoLicitacaoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+				
+				<p:outputLabel value="Status: " />
+				<p:selectOneMenu id="listaStatus"
+					value="#{tipoLicitacaoBean.tipoCadastro.status}">
+					<f:selectItem itemValue="" itemLabel="Selecione o Status" />
+					<f:selectItem itemValue="Aplicar" itemLabel="Aplicar" />
+					<f:selectItem itemValue="Omitir" itemLabel="Omitir" />					
+					<f:validateBean />
+				</p:selectOneMenu>
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<p:commandButton value="Gravar" icon="ui-icon-disk"
+						actionListener="#{tipoLicitacaoBean.salvar}"
+						update=":msgGlobal :formCadLicitacao:listaTipo"
+						oncomplete="PF('DlgTipo').hide();" />
+
+					<p:commandButton value="Voltar" icon="ui-icon-arrowreturnthick-1-w"
+						onclick="PF('DlgTipo').hide();" />				
+			</h:panelGrid>
+		</h:form>
+		</p:dialog>
+		
+		<!-- Dialogo para o cadastro do Tipo de Modalidade de Licitação -->
+		<p:dialog closable="true" draggable="true" modal="true"
+			resizable="false" header="Cadastro Modalidade de Licitação" widgetVar="DlgModalidade"
+			appendTo="@(body)">
+			<h:form id="formCadModalidade">		
+
+			<h:panelGrid id="pnlModalidadeDados" columns="2">
+
+				<p:outputLabel value="Descrição:" />
+				<p:inputText maxlength="100" size="50"
+					value="#{modalidadeLicitacaoBean.modalidadeCadastro.descricao}"
+					readonly="#{modalidadeLicitacaoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+				
+				<p:outputLabel value="Status: " />
+				<p:selectOneMenu id="listaStatus"
+					value="#{modalidadeLicitacaoBean.modalidadeCadastro.status}">
+					<f:selectItem itemValue="" itemLabel="Selecione o Status" />
+					<f:selectItem itemValue="Aplicar" itemLabel="Aplicar" />
+					<f:selectItem itemValue="Omitir" itemLabel="Omitir" />					
+					<f:validateBean />
+				</p:selectOneMenu>
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<p:commandButton value="Gravar" icon="ui-icon-disk"
+						actionListener="#{modalidadeLicitacaoBean.salvar}"
+						update=":msgGlobal :formCadLicitacao:listaModalidade"
+						oncomplete="PF('DlgModalidade').hide();" />
+
+					<p:commandButton value="Voltar" icon="ui-icon-arrowreturnthick-1-w"
+						onclick="PF('DlgModalidade').hide();" />				
+			</h:panelGrid>
+		</h:form>
+		</p:dialog>
+		
+		<!-- Dialogo para o cadastro de Empresa vencedora -->
+		<p:dialog closable="true" draggable="true" modal="true"
+			resizable="false" header="Cadastro Empresa vencedora" widgetVar="DlgEmpresa"
+			appendTo="@(body)">
+			<h:form id="formCadEmpresa">		
+
+			
+			<h:panelGrid id="pnlEmpresaDados" columns="2">
+
+				<p:outputLabel value="Razão Social:" />
+				<p:inputText maxlength="50" size="30"
+					value="#{empresaBean.empresaCadastro.razao}"
+					readonly="#{empresaBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+
+				<p:outputLabel value="CNPJ/CPF:" />
+				<p:inputText size="14" maxlength="20"
+					value="#{empresaBean.empresaCadastro.cnpj}"
+					readonly="#{empresaBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+				
+				<p:outputLabel value="Email:" />
+				<p:inputText maxlength="50" size="30"
+					value="#{empresaBean.empresaCadastro.email}"
+					readonly="#{empresaBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<p:commandButton value="Gravar" icon="ui-icon-disk"
+						actionListener="#{empresaBean.salvar}"
+						update=":msgGlobal :formCadLicitacao:listaEmpresa"
+						oncomplete="PF('DlgEmpresa').hide();" />
+
+					<p:commandButton value="Voltar" icon="ui-icon-arrowreturnthick-1-w"
+						onclick="PF('DlgEmpresa').hide();" />				
+			</h:panelGrid>
+		</h:form>
+		</p:dialog>
+		
+	</ui:define>
+</ui:composition>
+
+</html>

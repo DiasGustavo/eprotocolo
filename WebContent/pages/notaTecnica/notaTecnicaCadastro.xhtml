@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="notacao" value="#{notaTecnicaBean.acao}" />
+			<f:viewParam name="notaId" value="#{notaTecnicaBean.codigo}" />
+			<f:event listener="#{notaTecnicaBean.carregarDados}" type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="formCadNota">
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Cadastro Nota Técnica" />
+				</f:facet>
+
+			</p:toolbar>
+			<p:separator />
+			<h:panelGrid id="pnlNotaDados" columns="4">
+
+				<p:outputLabel value="Tipo:" />
+				<p:selectOneMenu id="listaTipo"
+					value="#{notaTecnicaBean.notaTecnicaCadastro.tipo}" style="width:200px;">
+					<f:selectItem itemValue="" itemLabel="Selecione o Tipo" />
+					<f:selectItem itemValue="consumo" itemLabel="Consumo" />
+					<f:selectItem itemValue="serviços Pessoa Fisica"
+						itemLabel="Serviços Pessoa Física" />
+					<f:selectItem itemValue="serviços Pessoa Juridica"
+						itemLabel="Serviços Pessoa Jurídica" />
+					<f:selectItem itemValue="diarias" itemLabel="Diárias" />
+					<f:selectItem itemValue="aluguel Pessoa Fisica"
+						itemLabel="Aluguel Pessoa Física" />
+					<f:selectItem itemValue="aluguel Pessoa Juridica"
+						itemLabel="Aluguel Pessoa Jurídica" />
+					<f:selectItem itemValue="locação de veiculos"
+						itemLabel="Locação de veículos" />
+					<f:selectItem itemValue="obras" itemLabel="Obras" />
+					<f:selectItem itemValue="publicidade" itemLabel="Publicidade" />
+					<f:selectItem itemValue="passagens" itemLabel="Passagens" />
+					<f:selectItem itemValue="hospedagem" itemLabel="Hospedagem" />
+					<f:selectItem itemValue="contratação artistica Pessoa Fisica"
+						itemLabel="Contratação artística Pessoa Física" />
+					<f:selectItem itemValue="contratação artistica Pessoa Juridica"
+						itemLabel="Contratação artística Pessoa Jurídica" />
+					<f:selectItem itemValue="desapropriação" itemLabel="Desapropriação" />
+					<f:selectItem itemValue="aluguel social e ajuda de custo"
+						itemLabel="Aluguel social e ajuda de custo" />
+					<f:selectItem itemValue="bolsa atleta" itemLabel="Bolsa Atleta" />
+					<f:selectItem itemValue="Ordem Judicial" itemLabel="Ordem Judicial" />
+					<f:selectItem itemValue="Terceirizada" itemLabel="Terceirizada" />
+					<f:selectItem itemValue="Patrocínio" itemLabel="Patrocínio" />
+					<f:selectItem itemValue="Consultoria" itemLabel="Consultoria" />
+					<f:selectItem itemValue="Ajuda de Custo" itemLabel="Ajuda de Custo" />
+					<f:selectItem itemValue="Aluguel Social" itemLabel="Aluguel Social" />
+					<f:selectItem itemValue="Outros" itemLabel="Outros" />
+					<f:validateBean />
+				</p:selectOneMenu>
+
+				<h:outputLabel value="Data: " />
+				<p:calendar id="entrada"
+					value="#{notaTecnicaBean.notaTecnicaCadastro.dataEntrada}"
+					pattern="dd/MM/yyyy" mask="true" mode="popup"
+					readonlyInput="#{notaTecnicaBean.acao == 'excluir'}" locale="pt"
+					timeZone="GMT-3">
+					<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+					<f:validateBean />
+				</p:calendar>
+
+				<p:outputLabel value="Processo: " />
+				<p:selectOneMenu id="listaProcesso"
+					value="#{notaTecnicaBean.notaTecnicaCadastro.documento}"
+					converter="documentoConverter" filter="true" style="width: 200px;">
+					<f:selectItem itemValue="" itemLabel="Selecione o processo" />
+					<f:selectItems value="#{notaTecnicaBean.listaDocumentos}"
+						var="documento" itemValue="#{documento}"
+						itemLabel="#{documento.id} - Nº #{documento.processo} - #{documento.secretaria}" />
+					<f:validateBean />
+				</p:selectOneMenu>
+				<p:spacer />
+
+			</h:panelGrid>
+
+			<p:commandButton value="Atos" icon="ui-icon-circle-plus"
+				style="margin-top: 1%" oncomplete="PF ('DlgAtos').show();" />
+
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Atos Presentes" />
+				</f:facet>
+			</p:toolbar>
+			<p:dataTable id="tblAtoChecklist"
+				emptyMessage="Nenhum registro encontrado."
+				value="#{notaTecnicaBean.listaChecklists}" var="checklist" rows="5"
+				paginator="true">
+
+				<p:column headerText="Descriacao">
+					<h:outputText value="#{checklist.atos.descricao}" />
+				</p:column>
+
+				<p:column headerText="Categoria">
+					<h:outputText value="#{checklist.atos.categoria}" />
+				</p:column>
+
+				<p:column headerText="Status">
+					<h:outputText value="#{checklist.status}" />
+				</p:column>
+
+				<p:column headerText="Opções" style="width: 9%;">
+					<p:commandButton value="Remover" icon="ui-icon-circle-close"
+						actionListener="#{notaTecnicaBean.removerAtos(checklist)}"
+						update=":formCadNota:tblAtoChecklist
+								:formCadNota:tblAtoChecklistInativo"
+						process="@this">
+					</p:commandButton>
+				</p:column>
+
+			</p:dataTable>
+			<p:separator />
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Atos Ausentes" />
+				</f:facet>
+			</p:toolbar>
+			<p:dataTable id="tblAtoChecklistInativo"
+				emptyMessage="Nenhum registro encontrado."
+				value="#{notaTecnicaBean.listaAtosNaoSelecionados}" var="checklist"
+				rows="5" paginator="true">
+
+				<p:column headerText="Descriacao">
+					<h:outputText value="#{checklist.atos.descricao}" />
+				</p:column>
+
+				<p:column headerText="Categoria">
+					<h:outputText value="#{checklist.atos.categoria}" />
+				</p:column>
+
+				<p:column headerText="Status">
+					<h:outputText value="#{checklist.status}" />
+				</p:column>
+
+				<p:column headerText="Opções" style="width: 9%;">
+					<p:commandButton value="Remover" icon="ui-icon-circle-close"
+						actionListener="#{notaTecnicaBean.removerAtosInativos(checklist)}"
+						update=":formCadNota:tblAtoChecklist 
+								:formCadNota:tblAtoChecklistInativo"
+						process="@this">
+					</p:commandButton>
+				</p:column>
+
+			</p:dataTable>
+			
+			<p:editor id="conclusao"
+				value="#{notaTecnicaBean.notaTecnicaCadastro.conclusao}" height="400"
+				style="margin-bottom:10px">
+			</p:editor>
+
+			<p:outputLabel value="Status: " />
+			<p:selectOneMenu id="listaStatus"
+				value="#{notaTecnicaBean.notaTecnicaCadastro.status}">
+				<f:selectItem itemValue="sem status" itemLabel="Sem Status" />
+				<f:selectItem itemValue="conformidade" itemLabel="Conformidade" />
+				<f:selectItem itemValue="Conformidade parcial"
+					itemLabel="Conformidade Parcial" />
+				<f:selectItem itemValue="desconformidade"
+					itemLabel="desconformidade" />
+				<f:validateBean />
+			</p:selectOneMenu>
+			<h:panelGrid id="pnlResponsavel" columns="2">
+				<p:outputLabel value="Responsável:" />
+				<p:selectOneMenu id="listaResponsavel"
+					value="#{notaTecnicaBean.notaTecnicaCadastro.funcionario}"
+					converter="funcionarioConverter" filter="true"
+					filterMatchMode="startsWith" style="width: 220px;">
+					<f:selectItem itemValue="" itemLabel="Selecione o responsável" />
+					<f:selectItems value="#{notaTecnicaBean.listaFuncionarios}"
+						var="responsavel" itemValue="#{responsavel}"
+						itemLabel="#{responsavel.nome}" />
+					<f:validateBean />
+				</p:selectOneMenu>
+			</h:panelGrid>
+
+
+			<p:toolbar style="margin-top: 1%">
+				<p:toolbarGroup align="left">
+					<p:commandButton value="Gravar" icon="ui-icon-disk"
+						actionListener="#{notaTecnicaBean.salvar}"
+						update=":msgGlobal 
+						:formCadNota:tblAtoChecklist 
+						:formCadNota:tblAtoChecklistInativo
+						:formCadNota:listaProcesso 
+						:formCadNota:listaStatus
+						:formCadNota:listaTipo
+						:formCadNota:entrada
+						:formCadNota:conclusao"
+						rendered="#{notaTecnicaBean.acao == 'novo' and autenticacaoBean.orgaoLogado.status == 'A'}" /> 
+					<p:commandButton value="Novo" icon="ui-icon-plus"
+						actionListener="#{notaTecnicaBean.novo}"
+						rendered="#{notaTecnicaBean.acao == 'novo'}" />
+					<p:commandButton value="Gravar" icon="ui-icon-disk"
+						actionListener="#{notaTecnicaBean.editar}" update=":msgGlobal"
+						rendered="#{notaTecnicaBean.acao == 'editar'}" />
+					<p:commandButton id="parecerButtom" value="Nota Técnica"
+						icon="ui-icon-document" process="parecerButtom"
+						actionListener="#{notaTecnicaBean.gerarNota}" ajax="false"
+						onclick="this.form.target='_blank'"
+						rendered="#{notaTecnicaBean.acao == 'editar'}" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:commandButton value="Excluir" icon="ui-icon-close"
+						oncomplete="PF('confirmacaoExcluir').show();"
+						rendered="#{notaTecnicaBean.acao == 'excluir'}" />
+					<p:button value="voltar" icon="ui-icon-arrowreturnthick-1-w"
+						outcome="/pages/notaTecnica/notaTecnicaPesquisa.xhtml?faces-redirect=true" />
+				</p:toolbarGroup>
+			</p:toolbar>
+		</h:form>
+
+		<!-- Dialogo de Atos -->
+		<p:dialog closable="true" draggable="true" modal="true"
+			resizable="false" header="Pesquisa Atos" widgetVar="DlgAtos"
+			appendTo="@(body)" height="450px" width="800px">
+			<h:form id="formAtos">
+				<p:dataTable id="tbl_atos"
+					emptyMessage="Nenhum registro encontrado."
+					value="#{notaTecnicaBean.listaAtos}"
+					filteredValue="#{notaTecnicaBean.listaAtosFiltrados}"
+					selection="#{notaTecnicaBean.listaAtosSelecionados}" var="ato" rows="7"
+					rowKey="#{ato.id}" paginator="true" widgetVar="tblAtos"
+					editable="true" editMode="cell" process="@this">
+
+
+					<p:column selectionMode="multiple"
+						style="width:16px; align:center;" />
+
+					<p:column headerText="Descrição">
+						<h:outputText value="#{ato.descricao}" />
+					</p:column>
+
+					<p:column headerText="Categoria" filterBy="#{ato.categoria}"
+						filterMatchMode="exact" style="width:200px">
+
+						<f:facet name="filter">
+							<p:selectOneMenu onchange="PF('tblAtos').filter()"
+								style="width:180px">
+								<f:selectItem itemValue="" itemLabel="Selecione o Tipo" />
+								<f:selectItem itemValue="consumo" itemLabel="Consumo" />
+								<f:selectItem itemValue="serviços Pessoa Fisica"
+									itemLabel="Serviços Pessoa Física" />
+								<f:selectItem itemValue="serviços Pessoa Juridica"
+									itemLabel="Serviços Pessoa Jurídica" />
+								<f:selectItem itemValue="diarias" itemLabel="Diárias" />
+								<f:selectItem itemValue="aluguel Pessoa Fisica"
+									itemLabel="Aluguel Pessoa Física" />
+								<f:selectItem itemValue="aluguel Pessoa Juridica"
+									itemLabel="Aluguel Pessoa Jurídica" />
+								<f:selectItem itemValue="locação de veiculos"
+									itemLabel="Locação de veículos" />
+								<f:selectItem itemValue="obras" itemLabel="Obras" />
+								<f:selectItem itemValue="publicidade" itemLabel="Publicidade" />
+								<f:selectItem itemValue="passagens" itemLabel="Passagens" />
+								<f:selectItem itemValue="hospedagem" itemLabel="Hospedagem" />
+								<f:selectItem itemValue="contratação artistica Pessoa Fisica"
+									itemLabel="Contratação artística Pessoa Física" />
+								<f:selectItem itemValue="contratação artistica Pessoa Juridica"
+									itemLabel="Contratação artística Pessoa Jurídica" />
+								<f:selectItem itemValue="desapropriação"
+									itemLabel="Desapropriação" />
+								<f:selectItem itemValue="aluguel social e ajuda de custo"
+									itemLabel="Aluguel social e ajuda de custo" />
+								<f:selectItem itemValue="bolsa atleta" itemLabel="Bolsa Atleta" />
+								<f:selectItem itemValue="Ordem Judicial"
+									itemLabel="Ordem Judicial" />
+								<f:selectItem itemValue="Terceirizada" itemLabel="Terceirizada" />
+								<f:selectItem itemValue="Patrocínio" itemLabel="Patrocínio" />
+								<f:selectItem itemValue="Consultoria" itemLabel="Consultoria" />
+								<f:selectItem itemValue="Ajuda de Custo"
+									itemLabel="Ajuda de Custo" />
+								<f:selectItem itemValue="Aluguel Social"
+									itemLabel="Aluguel Social" />
+								<f:selectItem itemValue="Outros" itemLabel="Outros" />
+							</p:selectOneMenu>
+						</f:facet>
+
+						<h:outputText value="#{ato.categoria}" />
+					</p:column>
+
+					<!--Rever e Testar -->
+					<p:column headerText="Situação">
+						
+						<p:cellEditor id="celulaStatus">
+							<f:facet name="output">
+								<h:outputText value="#{ato.status}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:selectOneMenu value="#{ato.status}" style="width:100%">
+									<f:selectItems value="#{notaTecnicaBean.status}" />
+								</p:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column> 
+
+
+					<!-- botões -->
+					<f:facet name="footer">
+						<p:commandButton icon="ui-icon-circle-check" process="tbl_atos"
+							value="Adicionar"
+							actionListener="#{notaTecnicaBean.adicionarListAtos}"
+							update=":formCadNota:tblAtoChecklist
+									:formCadNota:tblAtoChecklistInativo" />
+					</f:facet>	
+					
+				</p:dataTable>
+				<!-- Fim do diálogo dos atos -->
+			</h:form>
+		</p:dialog>
+		
+		
+
+		<!-- MENSAGEM PARA CONFIRMAÇÃO DE EXCLUSÃO -->
+		<p:confirmDialog id="confirmacaoDialogExcluir" appendTo="@(body)"
+			message="Tem certeza que deseja EXCLUIR esta Nota Técnica?"
+			header="Confirmação" severity="alert" widgetVar="confirmacaoExcluir">
+			<p:commandButton id="btnConfirmExcluir" value="Sim"
+				oncomplete="PF('confirmacaoExcluir').hide()"
+				icon="ui-icon-circle-check" action="#{notaTecnicaBean.excluir}"
+				update=":msgGlobal" />
+			<p:commandButton id="btnDeclineExcluir" value="Cancelar"
+				onclick="PF('confirmacaoExcluir').hide()" type="button"
+				icon="ui-icon-cancel" />
+		</p:confirmDialog>
+	</ui:define>
+</ui:composition>
+
+</html>

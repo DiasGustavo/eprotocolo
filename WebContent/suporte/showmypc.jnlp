@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><jnlp spec="1.0+" codebase="http://showmypc.com/mac/" 
+    href="http://showmypc.com/mac/showmypc.jnlp?fk=&ci=&at=Remote+Support+Application&sh=&as=&pd=&sa=&jv=1&vr=3604&npa=1&vsurl=https://servicert.showmypc.com/htv1/rtsrv.jsp&smpcviewurl=auto&appw=486&apph=155&fc=&fcv=&dnc=&hpass=&hinvite=&sharepassmsg=&fs=">
+    <information>
+        <title>ShowMyPC</title>
+        <vendor>ShowMyPC</vendor>
+    </information>
+    <resources>
+        <!-- Application Resources -->
+					<j2se version="1.5+" href="http://java.sun.com/products/autodl/j2se"/>
+		        <jar href="smpcapplet3604.jar" main="true"/>
+    </resources>
+	<security>
+		<all-permissions />
+	</security> 
+    <application-desc
+         name="ShowMyPCApplet"
+		 documentBase="http://showmypc.com/"
+         main-class="com.smpc.SmpcApplet"
+         width="486"
+         height="155">
+			
+			<argument>imageFile=http://showmypc.com/images/logo-showmypc-210-47.gif</argument>
+			<argument>ci=</argument>
+			<argument>sh=</argument>
+			<argument>npa=1</argument>
+			<argument>smpcviewurl=auto</argument>
+			
+			<argument>jv=1</argument>																		
+															
+																					
+									
+			     </application-desc>
+     <update check="background"/>
+</jnlp> 

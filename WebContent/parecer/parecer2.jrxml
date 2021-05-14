@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.2.final using JasperReports Library version 6.2.2  -->
+<!-- 2018-03-05T10:02:52 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="parecer" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cbf6d102-8c96-4a30-9b95-7f2304ae5f6c">
+	<property name="com.jaspersoft.studio.data.sql.tables" value="ZGJfZG9jdW1lbnRvcy50YmxfY2hlY2tsaXN0ICwxNSwyNzksNjZiNWYwODUtOGZiZS00MmVmLWJh&#xA;NzMtODU2MDlmZmVlODM5O2RiX2RvY3VtZW50b3MudGJsX2RvY3VtZW50byAsMzMzLDE3NSw4MjM5&#xA;OWM5Zi1mNmZlLTRiMWEtODZjNC1jMWQ2Y2QwNTNjMGY7ZGJfZG9jdW1lbnRvcy50YmxfZnVuY2lv&#xA;bmFyaW8gLDQ5NCwxNSw0MDA4NzQ2MC00MWNlLTRkNDctYjJkMi1iYjMxMThlNDNkOTU7ZGJfZG9j&#xA;dW1lbnRvcy50YmxfZW1wcmVzYSAsNDk0LDM5Nyw1MDQzYmY4NS1hNDEzLTQ1NzgtOGZkYS01N2Y2&#xA;OWEyZTE4NWU7ZGJfZG9jdW1lbnRvcy50YmxfYXRvcyAsMTcxLDM5Nyw0MDVjOGY4Mi0zNzBkLTQ3&#xA;ZTUtYTUxZC05ZmUzNzU3ZDQ4MTc7ZGJfZG9jdW1lbnRvcy50YmxfcGFyZWNlciAsMTcxLDEyMyw0&#xA;NTA0ZTYwMi01MzQ2LTQyYzQtYjEwYi00ODViZTQ1MDc0OGY7"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="db_documentos"/>
+	<property name="net.sf.jasperreports.print.create.bookmarks" value="false"/>
+	<subDataset name="db_documentos" uuid="865a1baf-f67a-48d4-ba28-169bbb883ba5">
+		<property name="com.jaspersoft.studio.data.sql.tables" value="ZGJfZG9jdW1lbnRvcy50YmxfY2hlY2tsaXN0ICwxNSwxNzEsZDdmMzk0OWMtMGUwOS00MmU5LTk1&#xA;MTktZDJhNTFhMzVjYzAyO2RiX2RvY3VtZW50b3MudGJsX3BhcmVjZXIgLDE3MSwxNSw2N2Y2Zjdj&#xA;Ni03NzA1LTRjNDItOGE3Yi04NTAyMjFjNzMxZGM7ZGJfZG9jdW1lbnRvcy50YmxfYXRvcyAsMTcx&#xA;LDI4OSw2MWVjM2M3NC1kNDY5LTQ2OGMtYmZlMy01NWEwMTgyMDM0NWU7"/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="db_documentos"/>
+		<queryString>
+			<![CDATA[SELECT db_documentos.tbl_atos.descricao
+FROM db_documentos.tbl_checklist
+	INNER JOIN db_documentos.tbl_parecer ON 
+	 db_documentos.tbl_checklist.fk_parecer = db_documentos.tbl_parecer.cod_parecer 
+	INNER JOIN db_documentos.tbl_atos ON 
+	 db_documentos.tbl_checklist.fk_atos = db_documentos.tbl_atos.cod_atos 
+WHERE 
+	 db_documentos.tbl_parecer.cod_parecer = db_documentos.tbl_checklist.fk_parecer]]>
+		</queryString>
+		<field name="descricao" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="listaNotas" uuid="e3f7cd85-c48c-4867-ab98-70ef9bc8f1c0">
+		<property name="com.jaspersoft.studio.data.sql.tables" value="ZGJfZG9jdW1lbnRvcy50Ymxfbm90YV9lbXBlbmhvIEFTICw5NiwxOCxkZjk3ZWQxOC0xOWY2LTQ1&#xA;ZjgtODk3Ni05NDA1ODhjZDQ1ZDA7"/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="db_documentos"/>
+		<queryString>
+			<![CDATA[SELECT db_documentos.tbl_nota_empenho.numero
+FROM db_documentos.tbl_nota_empenho]]>
+		</queryString>
+		<field name="numero" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="DESFECHO" class="java.lang.String"/>
+	<parameter name="NUM_PARECER" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT db_documentos.tbl_parecer.numero,
+	db_documentos.tbl_documento.objeto,
+	db_documentos.tbl_empresa.razao,
+	db_documentos.tbl_documento.proc_licitatorio,
+	db_documentos.tbl_documento.contrato,
+	db_documentos.tbl_documento.dt_homologacao,
+	db_documentos.tbl_documento.aditivo,
+	db_documentos.tbl_documento.fiscal_contrato,
+	db_documentos.tbl_documento.empenho,
+	db_documentos.tbl_checklist.categoria,
+	db_documentos.tbl_funcionario.nome,
+	db_documentos.tbl_funcionario.funcao,
+	db_documentos.tbl_parecer.dt_entrada,
+	db_documentos.tbl_parecer.conclusao,
+	db_documentos.tbl_parecer.status,
+	db_documentos.tbl_documento.empresa_fk,
+	db_documentos.tbl_documento.fk_funcionario,
+	db_documentos.tbl_parecer.fk_funcionario,
+	db_documentos.tbl_parecer.fk_documento,
+	db_documentos.tbl_checklist.fk_parecer,
+	db_documentos.tbl_checklist.fk_atos,
+	db_documentos.tbl_documento.medicao,
+	db_documentos.tbl_atos.descricao,
+	db_documentos.tbl_funcionario.matricula
+FROM db_documentos.tbl_checklist
+	INNER JOIN db_documentos.tbl_parecer ON 
+	 db_documentos.tbl_checklist.fk_parecer = db_documentos.tbl_parecer.cod_parecer 
+	INNER JOIN db_documentos.tbl_documento ON 
+	 db_documentos.tbl_parecer.fk_documento = db_documentos.tbl_documento.cod_doc 
+	INNER JOIN db_documentos.tbl_funcionario ON 
+	 db_documentos.tbl_documento.fk_funcionario = db_documentos.tbl_funcionario.cod_fun 
+	 AND db_documentos.tbl_parecer.fk_funcionario = db_documentos.tbl_funcionario.cod_fun 
+	INNER JOIN db_documentos.tbl_empresa ON 
+	 db_documentos.tbl_documento.empresa_fk = db_documentos.tbl_empresa.cod_empresa 
+	INNER JOIN db_documentos.tbl_atos ON 
+	 db_documentos.tbl_checklist.fk_atos = db_documentos.tbl_atos.cod_atos 
+WHERE 
+	 db_documentos.tbl_parecer.numero = $P{NUM_PARECER}]]>
+	</queryString>
+	<field name="numero" class="java.lang.String"/>
+	<field name="objeto" class="java.lang.String"/>
+	<field name="razao" class="java.lang.String"/>
+	<field name="proc_licitatorio" class="java.lang.String"/>
+	<field name="contrato" class="java.lang.String"/>
+	<field name="dt_homologacao" class="java.sql.Date"/>
+	<field name="aditivo" class="java.lang.String"/>
+	<field name="fiscal_contrato" class="java.lang.String"/>
+	<field name="empenho" class="java.lang.String"/>
+	<field name="categoria" class="java.lang.String"/>
+	<field name="nome" class="java.lang.String"/>
+	<field name="funcao" class="java.lang.String"/>
+	<field name="dt_entrada" class="java.sql.Date"/>
+	<field name="conclusao" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<field name="empresa_fk" class="java.lang.Long"/>
+	<field name="fk_funcionario" class="java.lang.Long"/>
+	<field name="COLUMN_18" class="java.lang.Long"/>
+	<field name="fk_documento" class="java.lang.Long"/>
+	<field name="fk_parecer" class="java.lang.Long"/>
+	<field name="fk_atos" class="java.lang.Long"/>
+	<field name="medicao" class="java.lang.String"/>
+	<field name="descricao" class="java.lang.String"/>
+	<field name="matricula" class="java.lang.String"/>
+	<background>
+		<band height="802" splitType="Stretch">
+			<image scaleImage="FillFrame">
+				<reportElement positionType="Float" x="0" y="0" width="550" height="802" uuid="5dc342b5-cf79-4c92-b56a-fde2e030a08f"/>
+				<imageExpression><![CDATA["/images/marca_dagua.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<detail>
+		<band height="740" splitType="Prevent">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+			<staticText>
+				<reportElement positionType="Float" isPrintRepeatedValues="false" x="18" y="117" width="100" height="30" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="bdf3fb1b-8060-41e2-9ea5-a31dddcb48e4">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Top" markup="styled">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Do Objeto:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" isPrintRepeatedValues="false" x="18" y="159" width="133" height="30" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="61cc6963-b12d-4e8e-bec8-0bd6d8dfcadb"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dados da Despesa:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" isPrintRepeatedValues="false" x="18" y="337" width="100" height="30" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="21fcfb0a-b343-4ddc-9863-4f40c76b20a6">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Da Base Legal:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" isPrintRepeatedValues="false" x="18" y="402" width="271" height="30" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="ef651472-255e-4b7c-92dd-a8145dbd3acd">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Da previsão Orçamentária e Financeira:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" isPrintRepeatedValues="false" x="18" y="465" width="100" height="16" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="42ba5800-3f4e-425c-aeb6-2dc4e67ddb88"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Da Conclusão:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" isPrintRepeatedValues="false" x="192" y="599" width="100" height="30" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="c4d855be-0de6-491f-b1de-098327c39f5b"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Patos-PB, ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" isPrintRepeatedValues="false" x="18" y="117" width="520" height="39" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="2f58369a-e166-4d69-a55d-3262691571eb"/>
+				<textElement textAlignment="Left">
+					<font size="12"/>
+					<paragraph firstLineIndent="62" leftIndent="0"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{objeto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" isPrintRepeatedValues="false" x="58" y="80" width="325" height="30" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="e9de19b6-c923-4b1e-92c7-15dcb58b76dc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[PARECER DO CONTROLE INTERNO - PCI nº]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" isPrintRepeatedValues="false" x="378" y="79" width="100" height="30" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="54a2259c-902b-41fb-9000-83ad7bfccfba"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numero}]]></textFieldExpression>
+			</textField>
+			<frame>
+				<reportElement key="" positionType="Float" isPrintRepeatedValues="false" x="18" y="175" width="520" height="107" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="bc921aa2-f342-4f57-af79-621d42884b91"/>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement positionType="Float" isPrintRepeatedValues="false" x="38" y="2" width="480" height="20" isRemoveLineWhenBlank="true" uuid="ec9c89d7-e260-470e-9c41-94365e233edd">
+						<printWhenExpression><![CDATA[$F{razao}.length()>0]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Left">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA["-Favorecido: "+$F{razao}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" isPrintRepeatedValues="false" x="38" y="16" width="480" height="20" isRemoveLineWhenBlank="true" uuid="fa162014-4bd7-4263-9d7d-ae0f3ba8f725">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<printWhenExpression><![CDATA[$F{proc_licitatorio}.length()>0]]></printWhenExpression>
+					</reportElement>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA["-Procedimento Licitatório: " + $F{proc_licitatorio}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" isPrintRepeatedValues="false" x="38" y="31" width="480" height="20" isRemoveLineWhenBlank="true" uuid="c3345026-dd75-4752-9288-8137dbd42ec6">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<printWhenExpression><![CDATA[$F{contrato}.length()>0]]></printWhenExpression>
+					</reportElement>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA["-Contrato: " + $F{contrato}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" isPrintRepeatedValues="false" x="38" y="45" width="480" height="20" isRemoveLineWhenBlank="true" uuid="70bd139d-5f69-4e06-a0cf-45b1dea26fde">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<printWhenExpression><![CDATA[$F{dt_homologacao}.toString().length()>0]]></printWhenExpression>
+					</reportElement>
+					<textElement>
+						<font size="12"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA["-Data da Homologação: " + $F{dt_homologacao}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" isPrintRepeatedValues="false" x="38" y="58" width="480" height="20" isRemoveLineWhenBlank="true" uuid="7586f5ab-0d5f-4d06-955a-78670d1ba106">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<printWhenExpression><![CDATA[$F{aditivo}.length()>0]]></printWhenExpression>
+					</reportElement>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA["-Aditivo: " + $F{aditivo}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" isPrintRepeatedValues="false" x="38" y="71" width="480" height="25" isRemoveLineWhenBlank="true" uuid="f5808e5c-7ab7-4903-a09d-dc558ba58a24">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<printWhenExpression><![CDATA[$F{fiscal_contrato}.length()>0]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Justified">
+						<font size="12"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA["-Responsável pela Fiscalização do Contrato: " + $F{fiscal_contrato}]]></textFieldExpression>
+				</textField>
+				<componentElement>
+					<reportElement isPrintRepeatedValues="false" x="35" y="96" width="475" height="19" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="9aae9fb5-8a89-4355-8a4e-dc57d35f7e55"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+						<datasetRun subDataset="listaNotas" uuid="a1f351fd-6dfc-4c21-a813-d079fe39773d">
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:listContents height="19" width="475">
+							<textField>
+								<reportElement x="0" y="0" width="475" height="19" uuid="61818be9-4a73-4e20-9481-1152a7c6bb33"/>
+								<textElement>
+									<font size="12" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA["-Empenho: " + $F{numero}]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+			</frame>
+			<staticText>
+				<reportElement positionType="Float" isPrintRepeatedValues="false" x="18" y="290" width="520" height="50" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="a6fce908-7402-430b-9af9-9c602bb68f4b"/>
+				<textElement textAlignment="Justified">
+					<font size="12"/>
+					<paragraph firstLineIndent="40"/>
+				</textElement>
+				<text><![CDATA[Os servidores da Secretaria de Controle Interno da Prefeitura Municipal de Patos, no uso de suas atribuições legais, e após análise da despesa realizada e constante nestre processo, emite o presente parecer.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" isPrintRepeatedValues="false" x="18" y="338" width="520" height="62" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="c04dcd69-1408-4d0c-a1b0-593442967462"/>
+				<textElement textAlignment="Justified">
+					<font size="12"/>
+					<paragraph firstLineIndent="87"/>
+				</textElement>
+				<text><![CDATA[Com fundamento na Lei Federal nº 4320/64 (Lei da Despesa Pública), e subsidiado pelas orientações do Tribunal de Contas do Estado da Paraíba, bem como, no for cabível pelas obrigações exaradas nas Leis nº 8.666/93 (lei de Licitações e Contratos), passo a analisar a referida despesa.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" isPrintRepeatedValues="false" x="18" y="402" width="520" height="63" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="e993be1b-c7a8-4a2b-a11e-1558c64fafee"/>
+				<textElement textAlignment="Justified">
+					<font fontName="SansSerif" size="12"/>
+					<paragraph firstLineIndent="230"/>
+				</textElement>
+				<text><![CDATA[Certificamos o amparo de previsão orçamentária no Orçamento Geral do Município para o exercício em curso, nas especificações de dotação de projeto, atividade, operações especiais, elemento de despesa e fonte de recursos, especificados na Nota de Empenho anexa ao processo.]]></text>
+			</staticText>
+			<textField pattern="dd &apos;de&apos; MMMM &apos;de&apos; yyyy">
+				<reportElement positionType="Float" isPrintRepeatedValues="false" x="251" y="599" width="147" height="30" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="7a91b0df-38f1-42cc-800b-b94c3670d8be"/>
+				<textElement>
+					<font size="12"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dt_entrada}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" isPrintRepeatedValues="false" x="68" y="655" width="380" height="30" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="c5af6d1b-d250-4b22-80d2-31a1031edf8c"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" isPrintRepeatedValues="false" x="118" y="669" width="280" height="30" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="cd983438-35a2-47b1-a33d-a4fa46cfdbd7"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{funcao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" isPrintRepeatedValues="false" x="103" y="466" width="428" height="24" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="660b95fa-c699-443d-a764-b8ab246f49c7"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Dianta da análise dos documentos acostados ao processo, observou-se:]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement positionType="Float" isPrintRepeatedValues="false" mode="Transparent" x="40" y="481" width="498" height="17" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="6c68bfad-5ba8-496a-a431-f15ad4fcbdc6">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.CONTENTS.height" value="pixel"/>
+					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value=""/>
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+					<property name="com.jaspersoft.studio.unit.CONTENTS.width" value="pixel"/>
+				</reportElement>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Horizontal">
+					<datasetRun subDataset="db_documentos" uuid="3b05a809-c8fb-4c2e-9974-a029c81b0a03">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:listContents height="17" width="498">
+						<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<reportElement positionType="Float" isPrintRepeatedValues="false" x="0" y="0" width="480" height="17" isRemoveLineWhenBlank="true" uuid="0f31809d-e3be-4490-9e96-e61449f12e01">
+								<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+								<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+							</reportElement>
+							<textElement>
+								<font size="12"/>
+								<paragraph lineSpacingSize="0.0"/>
+							</textElement>
+							<textFieldExpression><![CDATA["-" + $F{descricao}.toLowerCase()+";"]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" isPrintRepeatedValues="false" x="18" y="523" width="520" height="51" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="688a6d08-ef43-493a-aea4-a8d163e3e197"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="rtf">
+					<font size="12"/>
+					<paragraph firstLineIndent="40"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Dessa forma, o processo está em "+$F{status}.toUpperCase()+ " " + $P{DESFECHO}+ " condições mínimas para subsidiar o gestor em sua decisão de pagamento e não exime o órgão de ser objeto de auditoria/inspeções para o acompanhamento, bem como de quaisquer outras apreciações quanto à observância do fiel cumprimento à legislação pertinente."]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" isPrintRepeatedValues="false" x="18" y="500" width="520" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="449e327b-85e5-47d5-a605-9ec5091db06f"/>
+				<textElement textAlignment="Justified">
+					<font size="12"/>
+					<paragraph lineSpacing="Single" firstLineIndent="40"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{conclusao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

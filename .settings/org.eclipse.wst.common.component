@@ -2,7 +2,7 @@
     <wb-module deploy-name="GerenteDocumento">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="context-root" value="gerentedocumento"/>
         <property name="java-output-path" value="/GerenteDocumento/build/classes"/>
+        <property name="context-root" value="protocoloeletronico"/>
     </wb-module>
 </project-modules>

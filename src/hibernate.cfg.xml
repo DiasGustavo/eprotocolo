@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+  "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3308/db_eprotocolo</property>
+		<property name="hibernate.connection.username">root</property>
+		<!--<property name="hibernate.connection.password">Java.1203*</property> -->
+		<property name="hibernate.connection.password">qwe123;</property> 
+		
+		<!-- organização do pool de conexão -->
+		<property name="c3p0.acquire_increment">4</property> 
+		<!-- Número mínimo de conexões que o pool irá manter -->
+		<property name="hibernate.c3p0.min_size">5</property>
+		<!-- Número máximo de conexões que o pool irá manter. -->
+		<property name="hibernate.c3p0.max_size">100</property>
+		<!-- configurar que as conexões ociosas por mais de 7200s ele fecha -->
+		<property name="hibernate.c3p0.timeout">7200</property>
+		<!-- configura quantas consultas serão colocadas em cache em um ambito geral -->
+		<property name="hibernate.c3p0.max_statements">100</property>
+		<property name="hibernate.c3p0.idle_test_period">60</property> <!-- segundos -->
+		<!-- fim da configuração do pool -->
+		
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
+			
+		<property name="current_session_context_class">thread</property>	
+		
+		<property name="hibernate.hbm2ddl.auto">update</property>
+
+		<property name="show_sql">true</property>
+		<property name="format_sql">true</property>
+		
+		<mapping class="br.com.protocoloeletronico.domain.Arquivo"/>
+		<mapping class="br.com.protocoloeletronico.domain.Funcionario"/>
+		<mapping class="br.com.protocoloeletronico.domain.Documento"/>
+		<mapping class="br.com.protocoloeletronico.domain.CadastraDocumento"/>
+		<mapping class="br.com.protocoloeletronico.domain.Orgao"/>
+		<mapping class="br.com.protocoloeletronico.domain.Endereco"/>
+		<mapping class="br.com.protocoloeletronico.domain.Empresa"/>
+		<mapping class="br.com.protocoloeletronico.domain.Atos"/>
+		<mapping class="br.com.protocoloeletronico.domain.Checklist"/>
+		<mapping class="br.com.protocoloeletronico.domain.ChecklistNota"/>
+		<mapping class="br.com.protocoloeletronico.domain.Parecer"/>
+		<mapping class="br.com.protocoloeletronico.domain.Licitacao"/>
+		<mapping class="br.com.protocoloeletronico.domain.ModalidadeLicitacao"/>
+		<mapping class="br.com.protocoloeletronico.domain.NotaTecnica"/>
+		<mapping class="br.com.protocoloeletronico.domain.NotaEmpenho"/>
+		<mapping class="br.com.protocoloeletronico.domain.Protocolo"/>
+		<mapping class="br.com.protocoloeletronico.domain.ControleRegistro"/>
+		<mapping class="br.com.protocoloeletronico.domain.Secretaria"/>
+		<mapping class="br.com.protocoloeletronico.domain.TipoLicitacao"/>
+		<mapping class="br.com.protocoloeletronico.domain.TipoProcesso"/>
+		
+	</session-factory>
+</hibernate-configuration>

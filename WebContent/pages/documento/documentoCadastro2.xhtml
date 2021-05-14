@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="docacao" value="#{documentoBean.acao}" />
+			<f:viewParam name="docId" value="#{documentoBean.codigo}" />
+
+			<f:event listener="#{documentoBean.carregarDados}"
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<h:form id="formCadDocumento" enctype="multipart/form-data">
+
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Cadastro Processo" />
+				</f:facet>
+			</p:toolbar>
+			<p:tabView id="tabViewDocumentos">
+				<p:tab title="Processo">
+					<h:panelGrid id="pnlDocumentoDados" columns="2">
+
+						<p:fieldset legend="Dados de Entrada"
+							style="margin-left:2px; margin-bottom:20px; width:380px; height:600px">
+							<h:panelGrid id="pnlEntradaDados" columns="2">
+
+								<p:outputLabel value="Nº Processo:" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="Objeto:" />
+								<p:inputTextarea class="textarea" maxlength="230"
+									value="#{documentoBean.docCadastro.objeto}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputTextarea>
+
+								<p:outputLabel value="Procedimento Licitatório:" />
+								<p:inputText maxlength="100" size="30"
+									value="#{documentoBean.docCadastro.procedimentoLicitatorio}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="Nº Contrato:" />
+								<p:inputText maxlength="20" size="20"
+									value="#{documentoBean.docCadastro.contrato}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="Data de Homologação:" />
+								<p:calendar value="#{documentoBean.docCadastro.dataHomologacao}"
+									pattern="dd/MM/yyyy" mask="true" mode="popup"
+									readonly="#{documentoBean.acao == 'excluir'}" locale="pt"
+									timeZone="GMT-3">
+									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+									<f:validateBean />
+								</p:calendar>
+
+								<p:outputLabel value="Nº Aditivo:" />
+								<p:inputText maxlength="70" size="30"
+									value="#{documentoBean.docCadastro.aditivo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="Fiscalização:" />
+								<p:inputTextarea class="textarea" maxlength="200"
+									value="#{documentoBean.docCadastro.fiscal}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputTextarea>
+
+								<p:outputLabel value="Nº Medição:" />
+								<p:inputText maxlength="5" size="10"
+									value="#{documentoBean.docCadastro.medicao}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="Empenho:" />
+								<p:inputText maxlength="20" size="30"
+									value="documentoBean.docCadastro.empenho"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="Data de Entrada:" />
+								<p:calendar value="#{documentoBean.docCadastro.dataEntrada}"
+									pattern="dd/MM/yyyy" mask="true" mode="popup"
+									readonly="#{documentoBean.acao == 'excluir'}" locale="pt"
+									timeZone="GMT-3">
+									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+									<f:validateBean />
+								</p:calendar>
+
+								<p:outputLabel value="Secretaria:" />
+								<p:selectOneMenu value="#{documentoBean.docCadastro.secretaria}">
+									<f:selectItem itemValue="administracao"
+										itemLabel="Administração" />
+									<f:selectItem itemValue="agricultura" itemLabel="Agricultura" />
+									<f:selectItem itemValue="gabinete" itemLabel="Gabinete" />
+									<f:selectItem itemValue="procon"
+										itemLabel="Defesa do Consumidor" />
+									<f:selectItem itemValue="des.economico"
+										itemLabel="Desenvolvimento Econômico" />
+									<f:selectItem itemValue="des.social"
+										itemLabel="Desenvolvimento Social" />
+									<f:selectItem itemValue="educacao" itemLabel="Educação" />
+									<f:selectItem itemValue="Financas" itemLabel="Finanças" />
+									<f:selectItem itemValue="infraestrutura"
+										itemLabel="Infraestrutura" />
+									<f:selectItem itemValue="meio.ambiente"
+										itemLabel="Meio Ambiente" />
+									<f:selectItem itemValue="planejamento" itemLabel="Planejamento" />
+									<f:selectItem itemValue="saude" itemLabel="Saúde" />
+									<f:selectItem itemValue="serv.publico"
+										itemLabel="Serviços Públicos" />
+									<f:selectItem itemValue="tur.esporte"
+										itemLabel="Turismo e Esportes" />
+									<f:selectItem itemValue="procuradoria" itemLabel="Procuradoria" />
+									<f:selectItem itemValue="fund.cultura"
+										itemLabel="Fundação Cultural" />
+									<f:validateBean />
+								</p:selectOneMenu>
+
+								<p:outputLabel value="Valor:" />
+								<p:inputText maxlength="10" size="10"
+									value="#{documentoBean.docCadastro.valor}"
+									readonly="#{documentoBean.acao == 'excluir'}"
+									converterMessage="Informe uma valor válido para o campo preço.">
+									<f:convertNumber pattern="0.00" />
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="Responsável:" />
+								<p:selectOneMenu id="listaResponsavel"
+									value="#{documentoBean.docCadastro.responsavel}"
+									converter="funcionarioConverter" filter="true"
+									filterMatchMode="startsWith" style="width: 99%;">
+									<f:selectItem itemValue="" itemLabel="Selecione o responsável" />
+									<f:selectItems value="#{documentoBean.listaFuncionarios}"
+										var="responsavel" itemValue="#{responsavel}"
+										itemLabel="#{responsavel.nome}" />
+									<f:validateBean />
+								</p:selectOneMenu>
+
+								<p:outputLabel value="Favorecido:" />
+								<p:selectOneMenu id="listaEmpreas"
+									value="#{documentoBean.docCadastro.empresa}"
+									converter="empresaConverter" filter="true"
+									filterMatchMode="startsWith" style="width: 99%;">
+									<f:selectItem itemValue="" itemLabel="Selecione a Empresa" />
+									<f:selectItems value="#{documentoBean.listaEmpresas}"
+										var="empresa" itemValue="#{empresa}"
+										itemLabel="#{empresa.razao}" />
+									<f:validateBean />
+								</p:selectOneMenu>
+
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:fieldset legend="Dados de Saída"
+							style="margin-left:25px; margin-bottom:20px; width:300px; height:600px">
+							<h:panelGrid id="pnlSaidaDados" columns="2">
+
+								<p:outputLabel value="Data de Saída:" />
+								<p:calendar value="#{documentoBean.docCadastro.dataSaida}"
+									pattern="dd/MM/yyyy" mask="true" mode="popup"
+									readonly="#{documentoBean.acao == 'excluir'}" locale="pt"
+									timeZone="GMT-3">
+									<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+									<f:validateBean />
+								</p:calendar>
+
+								<p:outputLabel value="Encaminhamento:" />
+								<p:selectOneMenu
+									value="#{documentoBean.docCadastro.encaminhamento}">
+									<f:selectItem itemValue="" itemLabel="Selecione a Secretaria" />
+									<f:selectItem itemValue="administracao"
+										itemLabel="Administração" />
+									<f:selectItem itemValue="agricultura" itemLabel="Agricultura" />
+									<f:selectItem itemValue="gabinete" itemLabel="Gabinete" />
+									<f:selectItem itemValue="procon"
+										itemLabel="Defesa do Consumidor" />
+									<f:selectItem itemValue="des.economico"
+										itemLabel="Desenvolvimento Econômico" />
+									<f:selectItem itemValue="des.social"
+										itemLabel="Desenvolvimento Social" />
+									<f:selectItem itemValue="educacao" itemLabel="Educação" />
+									<f:selectItem itemValue="Financas" itemLabel="Finanças" />
+									<f:selectItem itemValue="infraestrutura"
+										itemLabel="Infraestrutura" />
+									<f:selectItem itemValue="meio.ambiente"
+										itemLabel="Meio Ambiente" />
+									<f:selectItem itemValue="planejamento" itemLabel="Planejamento" />
+									<f:selectItem itemValue="saude" itemLabel="Saúde" />
+									<f:selectItem itemValue="serv.publico"
+										itemLabel="Serviços Públicos" />
+									<f:selectItem itemValue="tur.esporte"
+										itemLabel="Turismo e Esportes" />
+									<f:selectItem itemValue="procuradoria" itemLabel="Procuradoria" />
+									<f:selectItem itemValue="fund.cultura"
+										itemLabel="Fundação Cultural" />
+									<f:validateBean />
+								</p:selectOneMenu>
+
+								<p:outputLabel value="Observações:" />
+								<p:inputTextarea class="textarea" maxlength="50"
+									value="#{documentoBean.docCadastro.observacao}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputTextarea>
+
+								<p:outputLabel value="Status: " />
+								<p:selectOneMenu id="listaStatus"
+									value="#{documentoBean.docCadastro.status}">
+									<f:selectItem itemValue="em análise" itemLabel="em análise" />
+									<f:selectItem itemValue="analisado" itemLabel="analisado" />
+								</p:selectOneMenu>
+
+								<p:outputLabel value="Arquivo:" />
+								<h:panelGrid
+									rendered="#{documentoBean.acao == 'novo' or documentoBean.docCadastro.docArquivo == null and documentoBean.arquivoCarregado == null}"
+									columns="2">
+									<p:fileUpload value="#{documentoBean.arquivoCarregado}"
+										mode="simple" skinSimple="true" />
+								</h:panelGrid>
+
+								<h:panelGrid
+									rendered="#{documentoBean.acao == 'editar' and documentoBean.arquivoVisualizar != null}"
+									columns="2">
+									<p:commandButton value="Visualizar" ajax="false"
+										onclick="PrimeFaces.monitorDownload(showStatus, statusDialog);"
+										icon="ui-icon-arrowthick-1-s">
+										<p:fileDownload value="#{documentoBean.arquivoVisualizar}" />
+									</p:commandButton>
+								</h:panelGrid>
+
+							</h:panelGrid>
+						</p:fieldset>
+					</h:panelGrid>
+				</p:tab>
+				<p:tab title="Nota de Empenho">
+					<h:panelGrid id="pnlNotaDados" columns="2">
+
+				<p:outputLabel value="Número da Nota:" />
+				<p:inputText maxlength="10" size="10"
+					value="#{notaEmpenhoBean.notaCadastro.numero}"
+					readonly="#{notaEmpenhoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+
+				<p:outputLabel value="Valor:" />
+				<p:inputText maxlength="10" size="10"
+					value="#{notaEmpenhoBean.notaCadastro.valor}"
+					readonly="#{notaEmpenhoBean.acao == 'excluir'}"
+					converterMessage="Informe uma valor válido.">
+					<f:convertNumber pattern="0.00" />
+					<f:validateBean />
+				</p:inputText>
+
+				<p:outputLabel value="Observações:" />
+				<p:inputTextarea class="textarea" maxlength="50"
+					value="#{notaEmpenhoBean.notaCadastro.observacao}"
+					readonly="#{notaEmpenhoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputTextarea>
+
+				<p:outputLabel value="Documento:" />
+				<p:selectOneMenu id="listaDocumentos"
+					value="#{notaEmpenhoBean.notaCadastro.documento}"
+					converter="documentoConverter" filter="true"
+					filterMatchMode="startsWith" style="width: 99%;">
+					<f:selectItem itemValue="" itemLabel="Selecione o Documento" />
+					<f:selectItems value="#{notaEmpenhoBean.listaDocumentos}"
+						var="documento" itemValue="#{documento}"
+						itemLabel="#{documento.processo}" />
+					<f:validateBean />
+				</p:selectOneMenu>
+
+			</h:panelGrid>
+				</p:tab>
+			</p:tabView>
+			<p:fieldset>
+				<h:panelGrid columns="5">
+					<p:commandButton value="Novo"
+						actionListener="#{documentoBean.novo}"
+						update=":formCadDocumento:tabViewDocumentos:pnlDocumentoDados"
+						rendered="#{documentoBean.acao == 'novo'}" />
+					<p:commandButton value="Gravar"
+						actionListener="#{documentoBean.salvar}" ajax="false"
+						update=":msgGlobal :formCadDocumento:tabViewDocumentos:pnlDocumentoDados"
+						rendered="#{documentoBean.acao == 'novo'}" />
+					<p:button value="Voltar"
+						outcome="/pages/documento/documentoPesquisa.xhtml?faces-redirect=true" />
+					<p:commandButton value="Gravar"
+						actionListener="#{documentoBean.editar}" ajax="false"
+						update=":msgGlobal" rendered="#{documentoBean.acao == 'editar'}" />
+					<p:commandButton value="Excluir"
+						actionListener="#{documentoBean.excluir}" ajax="false"
+						update=":msgGlobal" rendered="#{documentoBean.acao == 'excluir'}" />
+				</h:panelGrid>
+			</p:fieldset>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+
+</html>

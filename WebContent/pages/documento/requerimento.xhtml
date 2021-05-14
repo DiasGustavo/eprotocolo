@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="docacao" value="#{documentoBean.acao}" />
+			<f:viewParam name="docId" value="#{documentoBean.codigo}" />
+
+			<f:event listener="#{documentoBean.carregarDados}"
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="opcao">
+			<p:outputLabel value="Tipo:" />
+			<p:selectOneMenu id="listaTiposDocumentos"
+				value="#{documentoBean.opcao}">
+				<f:selectItem itemValue="" itemLabel="Selecione o tipo " />
+				<f:selectItem itemValue="requerimentoCD"
+					itemLabel="Requerimento de Certidão de Débitos" />
+				<f:selectItem itemValue="requerimentoI"
+					itemLabel="Requerimento Imunidade Tributária" />
+
+				<p:ajax listener="#{documentoBean.mostrar}"
+					update=":msgGlobal :formCadDocumento :formCadIT" />
+
+			</p:selectOneMenu>
+		</h:form>
+
+		<h:form id="formCadDocumento" enctype="multipart/form-data">
+
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Cadastro Processo" />
+				</f:facet>
+			</p:toolbar>
+
+			<p:fieldset legend="Certidão de Débitos" style="margin-bottom:20px"
+				rendered="#{documentoBean.exibirCD}">
+
+				<h:panelGrid id="pnlDocumentoDados" columns="2"
+					rendered="#{documentoBean.exibirCD}">
+
+
+					<p:outputLabel value="Data: " />
+					<p:outputLabel value="#{documentoBean.docCadastro.dataEntrada}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm"
+							timeZone="America/Sao_Paulo" />
+					</p:outputLabel>
+
+					<p:outputLabel value="Nome:" />
+					<p:inputText maxlength="50" size="20"
+						value="#{documentoBean.docCadastro.processo}"
+						readonly="#{documentoBean.acao == 'excluir'}">
+						<f:validateBean />
+					</p:inputText>
+
+					<p:outputLabel value="CPF/CNPJ:" />
+					<p:inputText maxlength="50" size="20"
+						value="#{documentoBean.docCadastro.processo}"
+						readonly="#{documentoBean.acao == 'excluir'}">
+						<f:validateBean />
+					</p:inputText>
+
+					<p:outputLabel value="Município:" />
+					<p:inputText maxlength="50" size="20"
+						value="#{documentoBean.docCadastro.processo}"
+						readonly="#{documentoBean.acao == 'excluir'}">
+						<f:validateBean />
+					</p:inputText>
+
+					<p:outputLabel value="UF:" />
+					<p:inputText maxlength="50" size="20"
+						value="#{documentoBean.docCadastro.processo}"
+						readonly="#{documentoBean.acao == 'excluir'}">
+						<f:validateBean />
+					</p:inputText>
+
+					<p:outputLabel value="Telefone:" />
+					<p:inputText maxlength="50" size="20"
+						value="#{documentoBean.docCadastro.processo}"
+						readonly="#{documentoBean.acao == 'excluir'}">
+						<f:validateBean />
+					</p:inputText>
+
+					<p:outputLabel value="e-mail:" />
+					<p:inputText maxlength="50" size="20"
+						value="#{documentoBean.docCadastro.processo}"
+						readonly="#{documentoBean.acao == 'excluir'}">
+						<f:validateBean />
+					</p:inputText>
+
+					<p:outputLabel value="Tipo de Certidão:" />
+					<p:selectOneMenu id="listaTiposCertidoes">
+						<f:selectItem itemValue="" itemLabel="Selecione o tipo " />
+						<f:selectItem itemValue="negativa" itemLabel="Negativa" />
+						<f:selectItem itemValue="positiva" itemLabel="Positiva" />
+						<f:selectItem itemValue="pnegativa"
+							itemLabel="Positiva com Efeitos de Negativa" />
+						<f:validateBean />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Decisão Judicial?:" />
+					<p:selectOneRadio id="console" unselectable="true">
+						<f:selectItem itemLabel="Sim" itemValue="sim" />
+						<f:selectItem itemLabel="Não" itemValue="nao" />
+					</p:selectOneRadio>
+
+					<p:outputLabel value="Retirada por Terceiros?:" />
+					<p:selectOneRadio id="console1" unselectable="true">
+						<f:selectItem itemLabel="Sim" itemValue="sim" />
+						<f:selectItem itemLabel="Não" itemValue="nao" />
+					</p:selectOneRadio>
+
+					<p:spacer />
+					<p:outputLabel
+						value="Autorizo receber relatórios de situação fiscal, 
+        				extrato de débitos inscrito em DÍVIDA ATIVA ou qualquer tipo de certidão
+        				(positiva, negativa, positiva ou efeitos de negativa), responsabilizando-me
+        				pelo uso a ser dado aos referidos documentos e as informações nelas contidas.
+        				Declaro, sob as penas da lei, serem verdadeiros os fatos e comprovantes anexados a este documento.
+        				"></p:outputLabel>
+					<p:outputLabel value="Arquivo: " for="fileUpload" />
+					<p:fileUpload id="fileUpload"
+						fileUploadListener="#{acaoBean.upload}"
+						allowTypes="/(\.|\/)(pdf)$/"
+						invalidFileMessage="São permitidas somente pdf" fileLimit="5"
+						fileLimitMessage="Só é possível escolher 5 arquivos por vez."
+						multiple="true" sequential="true"
+						onstart="console.log('Iniciando envio de arquivo')"
+						onerror="console.log('Erro na requisição de envio')"
+						oncomplete="console.log('Envio concluído')" label="Escolher"
+						uploadLabel="Enviar" cancelLabel="Cancelar"
+						style="width: 70%; text-align: center;">
+
+					</p:fileUpload>
+
+					<p:outputLabel value="Arquivo: " for="fileUpload"
+						rendered="#{acaoBean.acao == 'editar'}" />
+
+					<p:dataTable id="tblArquivos"
+						emptyMessage="Nenhum registro encontrado."
+						value="#{acaoBean.arquivos}" var="arquivo" rows="5"
+						paginator="true" rendered="#{acaoBean.acao == 'editar'}"
+						style="width: 70%; text-align: center;">
+						<p:column headerText="Nome">
+							<h:outputText value="#{arquivo.nome}" />
+						</p:column>
+
+						<p:column headerText="Opções" style="width: 30%;">
+							<p:commandButton value="Visualizar" ajax="false"
+								actionListener="#{acaoBean.visualizarArquivo(arquivo)}"
+								icon="ui-icon-arrowthick-1-s">
+								<p:fileDownload value="#{acaoBean.arquivoVisualizar}" />
+							</p:commandButton>
+
+							<p:commandButton value="Remover"
+								actionListener="#{acaoBean.removerArquivo(arquivo)}"
+								ajax="false" update="@all">
+							</p:commandButton>
+						</p:column>
+
+					</p:dataTable>
+
+					<!-- fim do painel  -->
+
+
+					<h:panelGrid columns="5">
+						<p:commandButton value="Novo" icon="ui-icon-plus"
+							actionListener="#{documentoBean.novo}"
+							update=":formCadDocumento:pnlDocumentoDados"
+							rendered="#{documentoBean.acao == 'novo'}" />
+						<p:commandButton id="btn_gravar" value="Gravar"
+							icon="ui-icon-disk" actionListener="#{documentoBean.salvar}"
+							ajax="false"
+							update=":msgGlobal :formCadDocumento:pnlDocumentoDados"
+							rendered="#{documentoBean.acao == 'novo' and autenticacaoBean.orgaoLogado.status == 'A'}" />
+						<p:button value="Voltar" icon="ui-icon-arrowreturnthick-1-w"
+							outcome="/pages/documento/documentoPesquisa.xhtml?faces-redirect=true" />
+						<p:commandButton value="Gravar" icon="ui-icon-disk"
+							actionListener="#{documentoBean.editar}" ajax="false"
+							update=":msgGlobal" rendered="#{documentoBean.acao == 'editar'}" />
+						<p:commandButton value="Excluir" icon="ui-icon-close"
+							oncomplete="PF('confirmacaoExcluir').show();"
+							rendered="#{documentoBean.acao == 'excluir'}" />
+					</h:panelGrid>
+
+
+				</h:panelGrid>
+			</p:fieldset>
+
+
+
+		</h:form>
+
+		<h:form id="formCadIT">
+			<h:panelGrid id="cadImunidade" rendered="#{documentoBean.exibirIT}">
+
+				<p:fieldset legend="Requerimento de Imunidade Tributária"
+					style="margin-bottom:20px">
+					<p:outputLabel value="Data: " />
+					<p:outputLabel value="#{documentoBean.docCadastro.dataEntrada}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm"
+							timeZone="America/Sao_Paulo" />
+					</p:outputLabel>
+					<h:panelGrid id="pnlImunidadeDados" columns="2" cellpadding="2">
+
+						<p:fieldset legend="Campo I - Dados do Interessado">
+							<h:panelGrid columns="4">
+								<p:outputLabel value="Razão Social (PJ):" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="Telefone:" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="Nome (Requerente-PF):" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="Telefone:" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="e-mail:" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="CPF:" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="RG:" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="Endereço(Rua, Av., etc):" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="Número:" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="Bairro:" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="CEP:" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="Município:" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="Representatividade Junto ao Contribuinte:" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:fieldset legend="Campo II - Dados: Imóvel (IPTU), IM (ISSQN)">
+							<h:panelGrid columns="4">
+								<p:outputLabel value="Proprietário (PJ):" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="CNPJ:" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="Endereço(Rua, Av., etc):" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="Número:" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="Bairro:" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="CEP:" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="Nº Inscrição Imóvel:" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+
+								<p:outputLabel value="INSC. Municipal:" />
+								<p:inputText maxlength="50" size="20"
+									value="#{documentoBean.docCadastro.processo}"
+									readonly="#{documentoBean.acao == 'excluir'}">
+									<f:validateBean />
+								</p:inputText>
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:fieldset legend="Tributo(S) Objeto da Solicitação">
+							<p:selectOneMenu id="listaTiposTributo">
+								<f:selectItem itemValue="" itemLabel="Selecione o tipo " />
+								<f:selectItem itemValue="IPTU" itemLabel="IPTU" />
+								<f:selectItem itemValue="ISSQN" itemLabel="ISSQN" />
+								<f:selectItem itemValue="ITBI" itemLabel="ITBI" />
+								<f:validateBean />
+							</p:selectOneMenu>
+						</p:fieldset>
+
+						<p:fieldset legend="Fundamentação Legal">
+							<h:panelGrid columns="2">
+								<p:selectOneRadio id="console" unselectable="true" columns="2">
+									<f:selectItem
+										itemLabel="Templos Religiosos de Qualquer culto. CF/1988: art. 150, VI, 'B'"
+										itemValue="templos" />
+									<f:selectItem
+										itemLabel="Entidades Educacionais/ Assistência Social/ Partidos políticos (Inclusive suas fundações) e Entidades Sindicais dos Trabalhadores.CF/1988: art. 150, VI, 'C'"
+										itemValue="nao" />
+								</p:selectOneRadio>
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:fieldset legend="Arquivos">
+							
+							<p:fileUpload id="fileUpload"
+								fileUploadListener="#{acaoBean.upload}"
+								allowTypes="/(\.|\/)(pdf)$/"
+								invalidFileMessage="São permitidas somente pdf" fileLimit="5"
+								fileLimitMessage="Só é possível escolher 5 arquivos por vez."
+								multiple="true" sequential="true"
+								onstart="console.log('Iniciando envio de arquivo')"
+								onerror="console.log('Erro na requisição de envio')"
+								oncomplete="console.log('Envio concluído')" label="Escolher"
+								uploadLabel="Enviar" cancelLabel="Cancelar"
+								style="width: 70%; text-align: center;">
+
+							</p:fileUpload>
+
+							<p:outputLabel value="Arquivo: " for="fileUpload"
+								rendered="#{acaoBean.acao == 'editar'}" />
+
+							<p:dataTable id="tblArquivosIT"
+								emptyMessage="Nenhum registro encontrado."
+								value="#{acaoBean.arquivos}" var="arquivo" rows="5"
+								paginator="true" rendered="#{acaoBean.acao == 'editar'}"
+								style="width: 70%; text-align: center;">
+								<p:column headerText="Nome">
+									<h:outputText value="#{arquivo.nome}" />
+								</p:column>
+
+								<p:column headerText="Opções" style="width: 30%;">
+									<p:commandButton value="Visualizar" ajax="false"
+										actionListener="#{acaoBean.visualizarArquivo(arquivo)}"
+										icon="ui-icon-arrowthick-1-s">
+										<p:fileDownload value="#{acaoBean.arquivoVisualizar}" />
+									</p:commandButton>
+
+									<p:commandButton value="Remover"
+										actionListener="#{acaoBean.removerArquivo(arquivo)}"
+										ajax="false" update="@all">
+									</p:commandButton>
+								</p:column>
+
+							</p:dataTable>
+						</p:fieldset>
+
+						<!-- fim do painel  -->
+
+
+						<h:panelGrid columns="5">
+							<p:commandButton value="Novo" icon="ui-icon-plus"
+								actionListener="#{documentoBean.novo}"
+								update=":formCadIT:cadImunidade"
+								rendered="#{documentoBean.acao == 'novo'}" />
+							<p:commandButton id="btn_gravar_it" value="Gravar"
+								icon="ui-icon-disk" actionListener="#{documentoBean.salvar}"
+								ajax="false" update=":msgGlobal :formCadIT:cadImunidade"
+								rendered="#{documentoBean.acao == 'novo' and autenticacaoBean.orgaoLogado.status == 'A'}" />
+							<p:button value="Voltar" icon="ui-icon-arrowreturnthick-1-w"
+								outcome="/pages/documento/documentoPesquisa.xhtml?faces-redirect=true" />
+							<p:commandButton value="Gravar" icon="ui-icon-disk"
+								actionListener="#{documentoBean.editar}" ajax="false"
+								update=":msgGlobal" rendered="#{documentoBean.acao == 'editar'}" />
+							<p:commandButton value="Excluir" icon="ui-icon-close"
+								oncomplete="PF('confirmacaoExcluir').show();"
+								rendered="#{documentoBean.acao == 'excluir'}" />
+						</h:panelGrid>
+
+
+					</h:panelGrid>
+				</p:fieldset>
+			</h:panelGrid>
+
+		</h:form>
+
+
+
+		<!-- MENSAGEM PARA CONFIRMAÇÃO DE EXCLUSÃO -->
+		<p:confirmDialog id="confirmacaoDialogExcluir" appendTo="@(body)"
+			message="Tem certeza que deseja EXCLUIR este Processo?"
+			header="Confirmação" severity="alert" widgetVar="confirmacaoExcluir">
+			<p:commandButton id="btnConfirmExcluir" value="Sim"
+				oncomplete="PF('confirmacaoExcluir').hide()"
+				icon="ui-icon-circle-check" action="#{documentoBean.excluir}"
+				update=":msgGlobal" />
+			<p:commandButton id="btnDeclineExcluir" value="Cancelar"
+				onclick="PF('confirmacaoExcluir').hide()" type="button"
+				icon="ui-icon-cancel" />
+		</p:confirmDialog>
+
+
+		<p:confirmDialog id="confirmacaoDialogExcluir1s" appendTo="@(body)"
+			message="Tem certeza que deseja EXCLUIR este Processo?"
+			header="Confirmação" severity="alert" widgetVar="documentos">
+			<p:outputLabel
+				rendered="#{documentoBean.docCadastro.status} == 'requerimentoCD'"
+				value="Documentos necessários 
+						-Pessoa Física 
+						Do contribuinte:
+							Cópias do RG e CPF.
+        				"></p:outputLabel>
+		</p:confirmDialog>
+
+	</ui:define>
+
+</ui:composition>
+
+</html>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:event listener="#{modalidadeLicitacaoBean.listar}" type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form>
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Pesquisa Modalidades de Licitação" />
+				</f:facet>
+			</p:toolbar>
+
+			<p:dataTable emptyMessage="Nenhum registro encontrado."
+				value="#{modalidadeLicitacaoBean.listaModalidades}"
+				filteredValue="#{modalidadeLicitacaoBean.listaModalidadesFiltradas}" var="modalidade" rows="6"
+				paginator="true">
+				<f:facet name="footer">
+					<p:button value="Novo" icon="ui-icon-plus"
+						outcome="/pages/modalidadeLicitacao/modalidadeLicitacaoCadastro.xhtml?faces-redirect=true">
+						<f:param name="modacao" value="novo" />
+					</p:button>
+				</f:facet>
+				<p:column headerText="Código" filterBy="#{modalidade.id}"
+					filterStyle="max-width: 60%; min-width: 60%;"
+					style="width: 3%; text-align: center;">
+					<h:outputText value="#{modalidade.id}" />
+				</p:column>
+
+				<p:column headerText="Descrição" filterBy="#{modalidade.descricao}"
+					filterStyle="max-width: 97%; min-width: 97%;"
+					style="width: 12%; text-align: center;">
+					<h:outputText value="#{modalidade.descricao}" />
+				</p:column>		
+				
+				<p:column headerText="Status" filterBy="#{modalidade.status}"
+					filterStyle="max-width: 97%; min-width: 97%;"
+					style="width: 12%; text-align: center;">
+					<h:outputText value="#{modalidade.status}" />
+				</p:column>			
+
+				<p:column headerText="Opções" style="width: 6%; text-align: center;">
+					<p:button value="Editar" icon="	ui-icon-gear"
+						outcome="/pages/modalidadeLicitacao/modalidadeLicitacaoCadastro.xhtml?faces-redirect=true">
+						<f:param name="modId" value="#{modalidade.id}" />
+						<f:param name="modacao" value="editar" />
+					</p:button>
+					<p:button value="Excluir" icon="ui-icon-close"
+						outcome="/pages/modalidadeLicitacao/modalidadeLicitacaoCadastro.xhtml?faces-redirect=true">
+						<f:param name="modId" value="#{modalidade.id}" />
+						<f:param name="modacao" value="excluir" />
+					</p:button>
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+
+</html>

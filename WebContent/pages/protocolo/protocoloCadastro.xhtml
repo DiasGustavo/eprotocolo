@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="proacao" value="#{protocoloBean.acao}" />
+			<f:viewParam name="proId" value="#{protocoloBean.codigo}" />
+
+			<f:event listener="#{protocoloBean.carregarDados}"
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<h:form id="formCadProtocolo" enctype="multipart/form-data">
+
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Cadastro Protocolo" />
+				</f:facet>
+			</p:toolbar>
+
+			<h:panelGrid id="pnlProtocoloDados" columns="2">
+
+				<p:fieldset legend="Dados de Entrada"
+					style="margin-left:2px; margin-bottom:20px; width:380px; height:260px">
+					<h:panelGrid id="pnlEntradaDados" columns="2">
+
+						<p:outputLabel value="Nº Processo:" />
+						<p:inputText maxlength="50" size="20"
+							value="#{protocoloBean.protocoloCadastro.processo}"
+							readonly="#{protocoloBean.acao == 'excluir' or autenticacaoBean.funcionarioLogado.funcao != 'digitador'}">
+							<f:validateBean />
+						</p:inputText>
+
+						<p:outputLabel value="Descrição:" />
+						<p:inputTextarea class="textarea" maxlength="1024"
+							value="#{protocoloBean.protocoloCadastro.descricao}"
+							readonly="#{protocoloBean.acao == 'excluir' or autenticacaoBean.funcionarioLogado.funcao != 'digitador'}">
+							<f:validateBean />
+						</p:inputTextarea>
+
+						<p:outputLabel value="Data de Entrada:"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'digitador' or autenticacaoBean.funcionarioLogado.funcao == 'digitador'}" />
+						<p:calendar value="#{protocoloBean.protocoloCadastro.dataEntrada}"
+							pattern="dd/MM/yyyy" mask="true" mode="popup"
+							readonly="#{protocoloBean.acao == 'excluir'}"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'digitador' or autenticacaoBean.funcionarioLogado.funcao == 'digitador'}"
+							locale="pt" timeZone="GMT-3">
+							<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+							<f:validateBean />
+						</p:calendar>
+
+						<p:outputLabel value="Responsável:"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'digitador' or autenticacaoBean.funcionarioLogado.funcao == 'digitador'}" />
+						<p:selectOneMenu id="listaResponsavel"
+							value="#{protocoloBean.protocoloCadastro.responsavel}"
+							converter="funcionarioConverter" filter="true"
+							filterMatchMode="startsWith" style="width: 200px;"
+							readonly="#{protocoloBean.acao == 'excluir'}"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'digitador' or autenticacaoBean.funcionarioLogado.funcao == 'digitador'}">
+							<f:selectItem itemValue="" itemLabel="Selecione o responsável" />
+							<f:selectItems value="#{protocoloBean.listaFuncionarios}"
+								var="responsavel" itemValue="#{responsavel}"
+								itemLabel="#{responsavel.nome}" />
+							<f:validateBean />
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Tipo de Processo:"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'digitador' or autenticacaoBean.funcionarioLogado.funcao == 'digitador'}" />
+						<p:selectOneMenu id="listaTipoProcessos"
+							value="#{protocoloBean.protocoloCadastro.tipo}"
+							converter="tipoProcessoConverter" filter="true"
+							filterMatchMode="startsWith" style="width: 200px;"
+							readonly="#{protocoloBean.acao == 'excluir'}"
+							rendered="#{autenticacaoBean.funcionarioLogado.funcao == 'digitador' or autenticacaoBean.funcionarioLogado.funcao == 'digitador'}">
+							<f:selectItem itemValue="" itemLabel="Selecione a Tipo" />
+							<f:selectItems value="#{protocoloBean.listaTiposProcessos}"
+								var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+							<f:validateBean />
+						</p:selectOneMenu>
+
+					</h:panelGrid>
+				</p:fieldset>
+
+				<p:fieldset legend="Dados de Saída"
+					style="margin-left:25px; margin-bottom:20px; width:300px; height:260px">
+					<h:panelGrid id="pnlSaidaDados" columns="2">
+
+						<p:outputLabel value="Data de Saída:" />
+						<p:calendar value="#{protocoloBean.protocoloCadastro.dataSaida}"
+							pattern="dd/MM/yyyy" mask="true" mode="popup"
+							readonly="#{protocoloBean.acao == 'excluir'}" locale="pt"
+							timeZone="GMT-3">
+							<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3" />
+							<f:validateBean />
+						</p:calendar>
+
+						<p:outputLabel value="Observações:" />
+						<p:inputTextarea class="textarea" maxlength="50"
+							value="#{protocoloBean.protocoloCadastro.observacao}"
+							readonly="#{protocoloBean.acao == 'excluir'}">
+							<f:validateBean />
+						</p:inputTextarea>
+
+						<p:outputLabel value="Status: " />
+						<p:selectOneMenu id="listaStatus"
+							value="#{protocoloBean.protocoloCadastro.status}">
+							<f:selectItem itemValue="em análise" itemLabel="em análise" />
+							<f:selectItem itemValue="analisado" itemLabel="analisado" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</p:fieldset>
+			</h:panelGrid>
+			<p:fieldset id="arquivos">
+				<p:outputLabel value="Upload de arquivos:" />
+				<p:commandButton value="Arquivos" type="button"
+							onclick="PF('uploadArquivos').show();" />
+			</p:fieldset>
+
+			<p:fieldset id="botoes">
+				<h:panelGrid columns="5">
+					<p:commandButton value="Novo" icon="ui-icon-plus"
+						actionListener="#{protocoloBean.novo}"
+						update=":formCadProtocolo:pnlProtocoloDados"
+						rendered="#{protocoloBean.acao == 'novo'}" />
+					<p:commandButton id="btn_gravar" value="Gravar" icon="ui-icon-disk"
+						actionListener="#{protocoloBean.salvar}" ajax="false"
+						update=":msgGlobal :formCadProtocolo:pnlProtocoloDados"
+						rendered="#{protocoloBean.acao == 'novo' and autenticacaoBean.orgaoLogado.status == 'A'}" />
+					<p:button value="Voltar" icon="ui-icon-arrowreturnthick-1-w"
+						outcome="/pages/protocolo/protocoloPesquisa.xhtml?faces-redirect=true" />
+					<p:commandButton value="Gravar" icon="ui-icon-disk"
+						actionListener="#{protocoloBean.editar}" ajax="false"
+						update=":msgGlobal" rendered="#{protocoloBean.acao == 'editar'}" />
+					<p:commandButton value="Excluir" icon="ui-icon-close"
+						oncomplete="PF('confirmacaoExcluir').show();"
+						rendered="#{protocoloBean.acao == 'excluir'}" />
+				</h:panelGrid>
+
+			</p:fieldset>
+
+		</h:form>
+
+
+
+		<!-- MENSAGEM PARA CONFIRMAÇÃO DE EXCLUSÃO -->
+		<p:confirmDialog id="confirmacaoDialogExcluir" appendTo="@(body)"
+			message="Tem certeza que deseja EXCLUIR este Processo?"
+			header="Confirmação" severity="alert" widgetVar="confirmacaoExcluir">
+			<p:commandButton id="btnConfirmExcluir" value="Sim"
+				oncomplete="PF('confirmacaoExcluir').hide()"
+				icon="ui-icon-circle-check" action="#{protocoloBean.excluir}"
+				update=":msgGlobal" />
+			<p:commandButton id="btnDeclineExcluir" value="Cancelar"
+				onclick="PF('confirmacaoExcluir').hide()" type="button"
+				icon="ui-icon-cancel" />
+		</p:confirmDialog>
+
+		<!-- UPLOAD DE ARQUIVOS -->
+		<p:dialog header="Arquivos" widgetVar="uploadArquivos" modal="true"
+			height="400" width="800" draggable="true" resizable="false"
+			appendTo="@(body)">
+			<h:form enctype="multipart/form-data">
+
+				<p:outputLabel id="labelNovo" value="Arquivo: " for="fileUpload" />
+				<p:fileUpload id="fileUpload"
+					fileUploadListener="#{protocoloBean.upload}"
+					allowTypes="/(\.|\/)(pdf)$/"
+					invalidFileMessage="São permitidas somente pdf" fileLimit="5"
+					fileLimitMessage="Só é possível escolher 5 arquivos por vez."
+					multiple="true" sequential="true"
+					onstart="console.log('Iniciando envio de arquivo')"
+					onerror="console.log('Erro na requisição de envio')"
+					oncomplete="console.log('Envio concluído')" label="Escolher"
+					uploadLabel="Enviar" cancelLabel="Cancelar"
+					style="width: 95%; text-align: center;">
+
+				</p:fileUpload>
+
+
+				<p:dataTable id="tblArquivos"
+					emptyMessage="Nenhum registro encontrado."
+					value="#{protocoloBean.listaArquivos}" var="arquivo" rows="5"
+					paginator="true" rendered="#{protocoloBean.acao == 'editar'}"
+					style="width: 95%; text-align: center;">
+					<p:column headerText="Nome">
+						<h:outputText value="#{arquivo.nome}" />
+					</p:column>
+
+					<p:column headerText="Opções" style="width: 50%;">
+						<p:commandButton value="Visualizar" ajax="false"
+							actionListener="#{protocoloBean.visualizarArquivo(arquivo)}"
+							icon="ui-icon-arrowthick-1-s">
+							<p:fileDownload value="#{protocoloBean.arquivoVisualizar}" />
+						</p:commandButton>
+
+						<p:commandButton value="Remover"
+							actionListener="#{protocoloBean.removerArquivo(arquivo)}"
+							ajax="false" update="@all">
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+
+			</h:form>
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>
+
+</html>

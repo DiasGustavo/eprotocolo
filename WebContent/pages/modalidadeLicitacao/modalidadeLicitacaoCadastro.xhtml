@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="modacao" value="#{modalidadeLicitacaoBean.acao}" />
+			<f:viewParam name="modId" value="#{modalidadeLicitacaoBean.codigo}" />
+
+			<f:event listener="#{modalidadeLicitacaoBean.carregarDados}" type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<h:form id="formCadModalidade">
+
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Cadastro Modalidade de Licitação" />
+				</f:facet>
+			</p:toolbar>
+
+			<h:panelGrid id="pnlModalidadeDados" columns="2">
+
+				<p:outputLabel value="Descrição:" />
+				<p:inputText maxlength="100" size="50"
+					value="#{modalidadeLicitacaoBean.modalidadeCadastro.descricao}"
+					readonly="#{modalidadeLicitacaoBean.acao == 'excluir'}">
+					<f:validateBean />
+				</p:inputText>
+				
+				<p:outputLabel value="Status: " />
+				<p:selectOneMenu id="listaStatus"
+					value="#{modalidadeLicitacaoBean.modalidadeCadastro.status}">
+					<f:selectItem itemValue="" itemLabel="Selecione o Status" />
+					<f:selectItem itemValue="Aplicar" itemLabel="Aplicar" />
+					<f:selectItem itemValue="Omitir" itemLabel="Omitir" />					
+					<f:validateBean />
+				</p:selectOneMenu>
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="5">
+				<p:commandButton value="Novo" icon="ui-icon-plus"
+					actionListener="#{modalidadeLicitacaoBean.novo}" update=":formCadModalidade:pnlModalidadeDados"
+					rendered="#{modalidadeLicitacaoBean.acao == 'novo'}" />
+				<p:commandButton value="Gravar" icon="ui-icon-disk"
+					actionListener="#{modalidadeLicitacaoBean.salvar}"
+					update=":msgGlobal :formCadModalidade:pnlModalidadeDados"
+					rendered="#{modalidadeLicitacaoBean.acao == 'novo' and autenticacaoBean.orgaoLogado.status == 'A'}" />
+				<p:button value="Voltar" icon="ui-icon-arrowreturnthick-1-w"
+					outcome="/pages/modalidadeLicitacao/modalidadeLicitacaoPesquisa.xhtml?faces-redirect=true" />
+				<p:commandButton value="Gravar" icon="ui-icon-disk"
+					actionListener="#{modalidadeLicitacaoBean.editar}" update=":msgGlobal"
+					rendered="#{modalidadeLicitacaoBean.acao == 'editar'}" />
+				<p:commandButton value="Excluir" icon="ui-icon-close"
+					oncomplete="PF('confirmacaoExcluir').show();"
+					rendered="#{modalidadeLicitacaoBean.acao == 'excluir'}" />
+			</h:panelGrid>
+		</h:form>
+
+		<!-- MENSAGEM PARA CONFIRMAÇÃO DE EXCLUSÃO -->
+		<p:confirmDialog id="confirmacaoDialogExcluir" appendTo="@(body)"
+			message="Tem certeza que deseja EXCLUIR esta Modalidade de Licitação?"
+			header="Confirmação" severity="alert" widgetVar="confirmacaoExcluir">
+			<p:commandButton id="btnConfirmExcluir" value="Sim"
+				oncomplete="PF('confirmacaoExcluir').hide()"
+				icon="ui-icon-circle-check" action="#{modalidadeLicitacaoBean.excluir}"
+				update=":msgGlobal" />
+			<p:commandButton id="btnDeclineExcluir" value="Cancelar"
+				onclick="PF('confirmacaoExcluir').hide()" type="button"
+				icon="ui-icon-cancel" />
+		</p:confirmDialog>
+	</ui:define>
+
+</ui:composition>
+
+</html>
